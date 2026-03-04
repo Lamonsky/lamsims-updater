@@ -4,6 +4,7 @@ using Microsoft.Win32;
 using sims4_updater.Helpers;
 using sims4_updater.Models;
 using sims4_updater.Services;
+using System.Collections.ObjectModel;
 using System.Windows;
 
 namespace sims4_updater.ViewModel
@@ -13,11 +14,36 @@ namespace sims4_updater.ViewModel
         [ObservableProperty]
         private Sims4Model _sims4Model;
 
+        [ObservableProperty]
+        private ObservableCollection<Sims4DLC> _dlcList = new ObservableCollection<Sims4DLC>();
+
         private static Logger _logger = new Logger();
         public static Logger Logger => _logger;
 
         [ObservableProperty]
         private bool _isDlcListVisible = false;
+
+        [ObservableProperty]
+        private string _dlcSearchText = string.Empty;
+
+        partial void OnDlcSearchTextChanged(string value)
+        {
+            if (DlcList == null || Sims4Model?.AllDlcs?.Sims4DLCs == null)
+                return;
+
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                DlcList = new ObservableCollection<Sims4DLC>(Sims4Model.AllDlcs.Sims4DLCs);
+            }
+            else
+            {
+                var filtered = Sims4Model.AllDlcs.Sims4DLCs
+                    .Where(dlc => dlc.Name.Contains(value, StringComparison.OrdinalIgnoreCase) ||
+                                  dlc.Code.Contains(value, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+                DlcList = new ObservableCollection<Sims4DLC>(filtered);
+            }
+        }
 
         [ObservableProperty]
         private string _currentVersion = string.Empty;
@@ -74,6 +100,25 @@ namespace sims4_updater.ViewModel
             }
         }
 
+
+        [RelayCommand]
+        private void GitHubLink()
+        {
+            try
+            {
+                var psi = new System.Diagnostics.ProcessStartInfo
+                {
+                    FileName = "https://github.com/lamonsky/sims4-updater",
+                    UseShellExecute = true
+                };
+                System.Diagnostics.Process.Start(psi);
+            }
+            catch (Exception ex)
+            {
+                Logger.AddLog($"Unable to open GitHub link: {ex.Message}");
+            }
+        }
+
         [RelayCommand]
         private void Browse()
         {
@@ -97,18 +142,21 @@ namespace sims4_updater.ViewModel
                 return;
             }
             Sims4Model.ScanDirectoryForDLCS(Sims4Model.GamePath);
+            DlcList = new ObservableCollection<Sims4DLC>(Sims4Model.AllDlcs.Sims4DLCs);
             IsDlcListVisible = true;            
         }
 
         [RelayCommand]
-        private async Task InstallDLCAsync()
+        private async Task InstallDLC()
         {
-            await Sims4Model.AllDlcs.DownloadAndInstallSelectedDlcsAsync(Logger, Sims4Model.GamePath);
+            Logger.AddLog("Starting DLC installation...");
+            await Sims4Model.AllDlcs.DownloadAndInstallFromMinioSelectedDlcsAsync(Logger, Sims4Model.GamePath);
         }
 
         [RelayCommand]
-        private async Task InstallDLCUnlockerAsync()
+        private async Task InstallDLCUnlocker()
         {
+            Logger.AddLog("Starting DLC Unlocker installation...");
             await Sims4DLCUnlocker.InstallUnlocker(Logger);
         }
 
@@ -120,6 +168,13 @@ namespace sims4_updater.ViewModel
                 dlc.ToInstall = true;
             }
         }
-
+        [RelayCommand]
+        private void UnselectAll()
+        {
+            foreach (var dlc in Sims4Model.AllDlcs.Sims4DLCs.Where(d=> !d.Installed))
+            {
+                dlc.ToInstall = false;
+            }
+        }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CG.Web.MegaApiClient;
-using sims4_updater.ViewModel;
 using sims4_updater.Helpers;
+using System.IO;
+using System.Net.Http;
 
 namespace sims4_updater.Models
 {
@@ -22,7 +22,8 @@ namespace sims4_updater.Models
         private bool _toInstall = false;
         private string _downloadFolder = string.Empty;
 
-        public async Task Download(Logger logger, INode targetNode)
+
+        public async Task Download(Logger logger)
         {
             _downloadFolder = System.IO.Path.Combine(System.IO.Path.GetTempPath(), "Sims4DLCs");
 
@@ -31,12 +32,6 @@ namespace sims4_updater.Models
                 System.IO.Directory.CreateDirectory(_downloadFolder);
             }
 
-            string downloadFilePath = System.IO.Path.Combine(_downloadFolder, $"{Code}.zip");
-
-            MegaApiClient megaApiClient = new MegaApiClient();
-
-            megaApiClient.LoginAnonymous();
-
             string outputFilePath = System.IO.Path.Combine(_downloadFolder, $"{Code}.zip");
 
             if (System.IO.File.Exists(outputFilePath))
@@ -44,57 +39,79 @@ namespace sims4_updater.Models
                 System.IO.File.Delete(outputFilePath);
             }
 
-            if (targetNode == null)
+            try
             {
-                logger.AddLog("DLC not found in the Mega folder.");
-                return;
-            }
+                var bufforsize = 4194304; // 4 MB
 
-            long totalSize = targetNode.Size;
-            long downloadedSize = 0;
-            DateTime lastUpdate = DateTime.Now;
+                using var httpClient = new HttpClient();
+                httpClient.Timeout = TimeSpan.FromHours(2);
 
-            IProgress<double> progress = new Progress<double>(p =>
-            {
-                StaticsVariables.Instance.Progress = p;
+                logger.AddLog($"Starting download DLC: {Name}");
 
-                downloadedSize = (long)(totalSize * p / 100.0);
+                using var response = await httpClient.GetAsync(Url, HttpCompletionOption.ResponseHeadersRead);
+                response.EnsureSuccessStatusCode();
 
-                if ((DateTime.Now - lastUpdate).TotalSeconds >= 1)
+                long? totalBytes = response.Content.Headers.ContentLength;
+
+                using var contentStream = await response.Content.ReadAsStreamAsync();
+                using var fileStream = new FileStream(outputFilePath, FileMode.Create, FileAccess.Write, FileShare.None, bufforsize, true);
+
+                var buffer = new byte[bufforsize];
+                long totalBytesRead = 0;
+                int bytesRead;
+                var lastLogTime = DateTime.Now;
+
+                while ((bytesRead = await contentStream.ReadAsync(buffer, 0, buffer.Length)) > 0)
                 {
-                    string downloaded = FormatFileSize(downloadedSize);
-                    string total = FormatFileSize(totalSize);
-                    StaticsVariables.Instance.DownloadSizeInfo = $"{downloaded} / {total}";
-                    logger.AddLog($"Downloaded: {downloaded} / {total}");
-                    lastUpdate = DateTime.Now;
+                    await fileStream.WriteAsync(buffer, 0, bytesRead);
+                    totalBytesRead += bytesRead;
+
+                    if (totalBytes.HasValue)
+                    {
+                        double progressPercentage = (double)totalBytesRead / totalBytes.Value * 100;
+                        string downloaded = FormatFileSize(totalBytesRead);
+                        string total = FormatFileSize(totalBytes.Value);
+
+                        StaticsVariables.Instance.Progress = progressPercentage;
+                        StaticsVariables.Instance.DownloadSizeInfo = $"{downloaded} / {total} ({progressPercentage:0.##}%)";
+
+                        if ((DateTime.Now - lastLogTime).TotalSeconds >= 5)
+                        {
+                            logger.AddLog($"Downloaded: {downloaded} / {total} ({progressPercentage:0.##}%)");
+                            lastLogTime = DateTime.Now;
+                        }
+                    }
+                    else
+                    {
+                        string downloaded = FormatFileSize(totalBytesRead);
+                        StaticsVariables.Instance.Progress = 0;
+                        StaticsVariables.Instance.DownloadSizeInfo = $"{downloaded} / Unknown";
+
+                        if ((DateTime.Now - lastLogTime).TotalSeconds >= 5)
+                        {
+                            logger.AddLog($"Downloaded: {downloaded}");
+                            lastLogTime = DateTime.Now;
+                        }
+                    }
                 }
-            });
 
-            await megaApiClient.DownloadFileAsync(targetNode, outputFilePath, progress);
-
-            string finalDownloaded = FormatFileSize(totalSize);
-            StaticsVariables.Instance.DownloadSizeInfo = $"{finalDownloaded} / {finalDownloaded}";
-            logger.AddLog($"Download complete: {finalDownloaded}");
-
-            megaApiClient.Logout();
-        }
-
-        private static string FormatFileSize(long bytes)
-        {
-            string[] sizes = { "B", "KB", "MB", "GB", "TB" };
-            double len = bytes;
-            int order = 0;
-            while (len >= 1024 && order < sizes.Length - 1)
-            {
-                order++;
-                len = len / 1024;
+                string finalDownloaded = FormatFileSize(totalBytesRead);
+                StaticsVariables.Instance.Progress = 100;
+                StaticsVariables.Instance.DownloadSizeInfo = $"{finalDownloaded} / {finalDownloaded}";
+                logger.AddLog($"Download complete: {finalDownloaded}");
             }
-            return $"{len:0.##} {sizes[order]}";
+            catch (Exception ex)
+            {
+                logger.AddLog($"Download failed: {ex.Message}");
+                throw;
+            }
         }
 
         public void Extract(Logger logger)
         {
-            string downloadFilePath = System.IO.Path.Combine(_downloadFolder, $"{Code}.zip");
+            string downloadFilePath = string.Empty;
+
+            downloadFilePath = System.IO.Path.Combine(_downloadFolder, $"{Code}.zip");
 
             if (string.IsNullOrEmpty(downloadFilePath) || !System.IO.File.Exists(downloadFilePath))
             {
@@ -165,6 +182,19 @@ namespace sims4_updater.Models
             {
                 logger.AddLog("Failed to remove DLC. Please clean the Sims4DLCs folder in the temp directory after installing all dlcs");
             }
+        }
+
+        private static string FormatFileSize(long bytes)
+        {
+            string[] sizes = { "B", "KB", "MB", "GB", "TB" };
+            double len = bytes;
+            int order = 0;
+            while (len >= 1024 && order < sizes.Length - 1)
+            {
+                order++;
+                len = len / 1024;
+            }
+            return $"{len:0.##} {sizes[order]}";
         }
 
     }

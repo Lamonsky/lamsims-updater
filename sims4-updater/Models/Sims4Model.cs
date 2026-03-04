@@ -14,6 +14,7 @@ namespace sims4_updater.Models
         private readonly Logger _logger;
         public Sims4AllDlcs AllDlcs { get; private set; } = new Sims4AllDlcs();
 
+        
         public Sims4Model(Logger logger)
         {
             _logger = logger;
