@@ -9,7 +9,7 @@ You need legit Sims 4 Base Game from EA App.
 This app only allow for downloading DLCs and packs and Unlocks them for your Legit Base Game.
 
 ## How to use?
-1. Download the latest release sims4-updater.exe file
+1. Download the latest sims4-updater.exe file from Release section on right side of site
 1. Run EXE file.
 1. Select Browse and select your Sims 4 Base Game folder (Usually located in C:\Program Files\Electronic Arts\The Sims 4)
 1. Select Scan and wait for the app to find your DLCs and Packs that you have already downloaded.
