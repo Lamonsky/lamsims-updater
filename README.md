@@ -1,8 +1,8 @@
-# sims4-updater
+# lamsims-updater
 
 Hello!
 
-This Project is called sims4-updater, but the truth is that for now it is only DLC Downloader and DLC Unlocker.
+This Project is called lamsims-updater, but the truth is that for now it is only DLC Downloader and DLC Unlocker.
 
 What does it mean for you?
 You need legit Sims 4 Base Game from EA App.
