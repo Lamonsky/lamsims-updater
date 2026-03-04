@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace sims4_updater.Services
 {
-    public static class Downloader
+    public static class FileDownloader
     {
         public static async Task DownloadFileAsync(string url, string destinationPath)
         {

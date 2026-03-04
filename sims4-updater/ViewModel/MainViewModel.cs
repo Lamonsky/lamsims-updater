@@ -108,7 +108,7 @@ namespace sims4_updater.ViewModel
             {
                 var psi = new System.Diagnostics.ProcessStartInfo
                 {
-                    FileName = "https://github.com/lamonsky/sims4-updater",
+                    FileName = "https://github.com/lamonsky/lamsims-updater",
                     UseShellExecute = true
                 };
                 System.Diagnostics.Process.Start(psi);

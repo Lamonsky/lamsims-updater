@@ -41,11 +41,11 @@ namespace sims4_updater.Models
 
                 if (clientType == "EA app")
                 {
-                    dllUrlToDownload = "https://github.com/Lamonsky/sims4-updater/releases/download/Beta/ea_app_version.dll";
+                    dllUrlToDownload = "https://github.com/Lamonsky/lamsims-updater/releases/download/Beta/ea_app_version.dll";
                 }
                 else if (clientType == "Origin")
                 {
-                    dllUrlToDownload = "https://github.com/Lamonsky/sims4-updater/releases/download/Beta/origin_version.dll";
+                    dllUrlToDownload = "https://github.com/Lamonsky/lamsims-updater/releases/download/Beta/origin_version.dll";
                 }
                 else
                 {
@@ -59,7 +59,7 @@ namespace sims4_updater.Models
                 {
                     logger.AddLog($"File {UnlockerDllName} not found in application folder. Attempting to download");
                    
-                    await Downloader.DownloadFileAsync(dllUrlToDownload, sourceDll);
+                    await FileDownloader.DownloadFileAsync(dllUrlToDownload, sourceDll);
 
                 }
 

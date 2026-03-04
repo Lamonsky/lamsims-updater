@@ -2,6 +2,7 @@
 using sims4_updater.Helpers;
 using System.IO;
 using System.Net.Http;
+using Downloader;
 
 namespace sims4_updater.Models
 {
@@ -22,7 +23,6 @@ namespace sims4_updater.Models
         private bool _toInstall = false;
         private string _downloadFolder = string.Empty;
 
-
         public async Task Download(Logger logger)
         {
             _downloadFolder = System.IO.Path.Combine(System.IO.Path.GetTempPath(), "Sims4DLCs");
@@ -39,66 +39,64 @@ namespace sims4_updater.Models
                 System.IO.File.Delete(outputFilePath);
             }
 
+            var downloadOpt = new DownloadConfiguration()
+            {
+                ChunkCount = 8, // wielowątkowe pobieranie
+                ParallelDownload = true,
+                MaxTryAgainOnFailure = 5, // retry logic
+                MaximumBytesPerSecond = 0, // bez limitu prędkości
+                HttpClientTimeout = 30000, // timeout per chunk
+                BufferBlockSize = 8192,
+                RequestConfiguration = new RequestConfiguration()
+                {
+                    KeepAlive = true,
+                    ConnectTimeout = 30000
+                }
+            };
+
+            var downloader = new DownloadService(downloadOpt);
+
+            logger.AddLog($"Starting download DLC: {Name}");
+            logger.AddLog($"URL: {Url}");
+
+            var lastLogTime = DateTime.Now;
+
+            downloader.DownloadProgressChanged += (sender, e) =>
+            {
+                StaticsVariables.Instance.Progress = e.ProgressPercentage;
+                StaticsVariables.Instance.DownloadSizeInfo = 
+                    $"{FormatFileSize(e.ReceivedBytesSize)} / {FormatFileSize(e.TotalBytesToReceive)} ({e.ProgressPercentage:0.##}%)";
+
+                if ((DateTime.Now - lastLogTime).TotalSeconds >= 1)
+                {
+                    logger.AddLog($"Downloaded: {FormatFileSize(e.ReceivedBytesSize)} / {FormatFileSize(e.TotalBytesToReceive)} ({e.ProgressPercentage:0.##}%)");
+                    lastLogTime = DateTime.Now;
+                }
+            };
+
+            downloader.DownloadFileCompleted += (sender, e) =>
+            {
+                if (e.Error != null)
+                {
+                    logger.AddLog($"Download failed: {e.Error.Message}");
+                }
+                else if (e.Cancelled)
+                {
+                    logger.AddLog("Download cancelled");
+                }
+                else
+                {
+                    logger.AddLog($"Download complete: {FormatFileSize(new FileInfo(outputFilePath).Length)}");
+                }
+            };
+
             try
             {
-                var bufforsize = 4194304; // 4 MB
-
-                using var httpClient = new HttpClient();
-                httpClient.Timeout = TimeSpan.FromHours(2);
-
-                logger.AddLog($"Starting download DLC: {Name}");
-
-                using var response = await httpClient.GetAsync(Url, HttpCompletionOption.ResponseHeadersRead);
-                response.EnsureSuccessStatusCode();
-
-                long? totalBytes = response.Content.Headers.ContentLength;
-
-                using var contentStream = await response.Content.ReadAsStreamAsync();
-                using var fileStream = new FileStream(outputFilePath, FileMode.Create, FileAccess.Write, FileShare.None, bufforsize, true);
-
-                var buffer = new byte[bufforsize];
-                long totalBytesRead = 0;
-                int bytesRead;
-                var lastLogTime = DateTime.Now;
-
-                while ((bytesRead = await contentStream.ReadAsync(buffer, 0, buffer.Length)) > 0)
-                {
-                    await fileStream.WriteAsync(buffer, 0, bytesRead);
-                    totalBytesRead += bytesRead;
-
-                    if (totalBytes.HasValue)
-                    {
-                        double progressPercentage = (double)totalBytesRead / totalBytes.Value * 100;
-                        string downloaded = FormatFileSize(totalBytesRead);
-                        string total = FormatFileSize(totalBytes.Value);
-
-                        StaticsVariables.Instance.Progress = progressPercentage;
-                        StaticsVariables.Instance.DownloadSizeInfo = $"{downloaded} / {total} ({progressPercentage:0.##}%)";
-
-                        if ((DateTime.Now - lastLogTime).TotalSeconds >= 5)
-                        {
-                            logger.AddLog($"Downloaded: {downloaded} / {total} ({progressPercentage:0.##}%)");
-                            lastLogTime = DateTime.Now;
-                        }
-                    }
-                    else
-                    {
-                        string downloaded = FormatFileSize(totalBytesRead);
-                        StaticsVariables.Instance.Progress = 0;
-                        StaticsVariables.Instance.DownloadSizeInfo = $"{downloaded} / Unknown";
-
-                        if ((DateTime.Now - lastLogTime).TotalSeconds >= 5)
-                        {
-                            logger.AddLog($"Downloaded: {downloaded}");
-                            lastLogTime = DateTime.Now;
-                        }
-                    }
-                }
-
-                string finalDownloaded = FormatFileSize(totalBytesRead);
+                await downloader.DownloadFileTaskAsync(Url, outputFilePath);
+                
                 StaticsVariables.Instance.Progress = 100;
-                StaticsVariables.Instance.DownloadSizeInfo = $"{finalDownloaded} / {finalDownloaded}";
-                logger.AddLog($"Download complete: {finalDownloaded}");
+                var finalSize = new FileInfo(outputFilePath).Length;
+                StaticsVariables.Instance.DownloadSizeInfo = $"{FormatFileSize(finalSize)} / {FormatFileSize(finalSize)}";
             }
             catch (Exception ex)
             {
@@ -139,14 +137,9 @@ namespace sims4_updater.Models
                     throw new InvalidOperationException("Extracted folder not found.");
                 }
 
-                // Check if there's a single subfolder (common in ZIP archives)
                 string[] subfolders = System.IO.Directory.GetDirectories(extrackedFolder);
-                if (subfolders.Length == 1)
-                {
-                    // Use the subfolder as the source
-                    extrackedFolder = subfolders[0];
-                    logger.AddLog($"Using subfolder: {System.IO.Path.GetFileName(extrackedFolder)}");
-                }
+
+                extrackedFolder = subfolders[0];
 
                 // Copy extracted files to the game path
                 foreach (string file in System.IO.Directory.GetFiles(extrackedFolder, "*", System.IO.SearchOption.AllDirectories))

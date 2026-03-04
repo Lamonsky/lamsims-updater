@@ -136,7 +136,7 @@ namespace sims4_updater.Models
                 {
                     logger.AddLog($"Downloading DLC: {dlc.Code} - {dlc.Name}");
 
-                    await Task.Run(() => dlc.Download(logger));
+                    await dlc.Download(logger);
 
                     logger.AddLog($"Extracting DLC: {dlc.Code} - {dlc.Name}");
                     await Task.Run(() => dlc.Extract(logger));
