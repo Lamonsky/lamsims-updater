@@ -18,5 +18,10 @@ This app only allow for downloading DLCs and packs and Unlocks them for your Leg
 1. And for last click Install DLC Unlocker and wait for the app to unlock the DLCs you selected.
 1. Enjoy your new DLCs and Packs!
 
+
+## Pretty important info
+If you encounter issues with downloading every dlc at one, or a lot of dlc at once (from my research it is either more then 2 EP or more then 5 SP), try downloading individually.
+Just remember to hit 'Scan' every time you finish downloading an DLC so app will refresh info and not download the ones already downloaded.
+
 ## Disclaimer
 Im planning to add updater for the game itself, but it will take more time.
