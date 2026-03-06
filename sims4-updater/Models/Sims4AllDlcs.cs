@@ -1,4 +1,4 @@
-using sims4_updater.Helpers;
+﻿using sims4_updater.Helpers;
 using System.Collections.ObjectModel;
 
 namespace sims4_updater.Models
@@ -75,7 +75,7 @@ namespace sims4_updater.Models
             Sims4DLCs.Add(new Sims4DLC { Code = "SP28", Name = "The Sims 4 Modern Menswear Kit", Url = "https://minio.lamonski.pl/sims4dlcs/My_Private_Stuff_SP28_Modern_Menswear_Kit.zip", Installed = false });
             Sims4DLCs.Add(new Sims4DLC { Code = "SP29", Name = "The Sims 4 Blooming Rooms Kit", Url = "https://minio.lamonski.pl/sims4dlcs/My_Private_Stuff_SP29_Blooming_Rooms_Kit.zip", Installed = false });
             Sims4DLCs.Add(new Sims4DLC { Code = "SP30", Name = "The Sims 4 Carnaval Streetwear Kit", Url = "https://minio.lamonski.pl/sims4dlcs/My_Private_Stuff_SP30_Carnaval_Streetwear_Kit.zip", Installed = false });
-            Sims4DLCs.Add(new Sims4DLC { Code = "SP31", Name = "The Sims 4 D�cor to the Max Kit", Url = "https://minio.lamonski.pl/sims4dlcs/My_Private_Stuff_SP31_Decor_to_the_Max_Kit.zip", Installed = false });
+            Sims4DLCs.Add(new Sims4DLC { Code = "SP31", Name = "The Sims 4 Décor to the Max Kit", Url = "https://minio.lamonski.pl/sims4dlcs/My_Private_Stuff_SP31_Decor_to_the_Max_Kit.zip", Installed = false });
             Sims4DLCs.Add(new Sims4DLC { Code = "SP32", Name = "The Sims 4 Moonlight Chic Kit", Url = "https://minio.lamonski.pl/sims4dlcs/My_Private_Stuff_SP32_Moonlight_Chic_Kit.zip", Installed = false });
             Sims4DLCs.Add(new Sims4DLC { Code = "SP33", Name = "The Sims 4 Little Campers Kit", Url = "https://minio.lamonski.pl/sims4dlcs/My_Private_Stuff_SP33_Little_Campers_Kit.zip", Installed = false });
             Sims4DLCs.Add(new Sims4DLC { Code = "SP34", Name = "The Sims 4 First Fits Kit", Url = "https://minio.lamonski.pl/sims4dlcs/My_Private_Stuff_SP34_First_Fits_Kit.zip", Installed = false });
@@ -112,9 +112,9 @@ namespace sims4_updater.Models
             Sims4DLCs.Add(new Sims4DLC { Code = "SP65", Name = "The Sims 4 Restoration Workshop Kit", Url = "https://minio.lamonski.pl/sims4dlcs/My_Private_Stuff_SP65_Restoration_Workshop_Kit.zip", Installed = false });
             Sims4DLCs.Add(new Sims4DLC { Code = "SP66", Name = "The Sims 4 Golden Years Kit", Url = "https://minio.lamonski.pl/sims4dlcs/My_Private_Stuff_SP66_Golden_Years_Kit.zip", Installed = false });
             Sims4DLCs.Add(new Sims4DLC { Code = "SP67", Name = "The Sims 4 Kitchen Clutter Kit", Url = "https://minio.lamonski.pl/sims4dlcs/My_Private_Stuff_SP67_Kitchen_Clutter_Kit.zip", Installed = false });
-            Sims4DLCs.Add(new Sims4DLC { Code = "SP68", Name = "The Sims 4 SpongeBob�s House Kit", Url = "https://minio.lamonski.pl/sims4dlcs/My_Private_Stuff_SP68_SpongeBob_House_Kit.zip", Installed = false });
+            Sims4DLCs.Add(new Sims4DLC { Code = "SP68", Name = "The Sims 4 SpongeBob’s House Kit", Url = "https://minio.lamonski.pl/sims4dlcs/My_Private_Stuff_SP68_SpongeBob_House_Kit.zip", Installed = false });
             Sims4DLCs.Add(new Sims4DLC { Code = "SP69", Name = "The Sims 4 Autumn Apparel Kit", Url = "https://minio.lamonski.pl/sims4dlcs/My_Private_Stuff_SP69_Autumn_Apparel_Kit.zip", Installed = false });
-            Sims4DLCs.Add(new Sims4DLC { Code = "SP70", Name = "The Sims 4 SpongeBob Kid�s Room Kit", Url = "https://minio.lamonski.pl/sims4dlcs/My_Private_Stuff_SP70_SpongeBob_Kid_Room_Kit.zip", Installed = false });
+            Sims4DLCs.Add(new Sims4DLC { Code = "SP70", Name = "The Sims 4 SpongeBob Kid’s Room Kit", Url = "https://minio.lamonski.pl/sims4dlcs/My_Private_Stuff_SP70_SpongeBob_Kid_Room_Kit.zip", Installed = false });
             Sims4DLCs.Add(new Sims4DLC { Code = "SP71", Name = "The Sims 4 Grange Mudroom Kit", Url = "https://minio.lamonski.pl/sims4dlcs/My_Private_Stuff_SP71_Grange_Mudroom_Kit.zip", Installed = false });
             Sims4DLCs.Add(new Sims4DLC { Code = "SP72", Name = "The Sims 4 Essential Glam Kit", Url = "https://minio.lamonski.pl/sims4dlcs/My_Private_Stuff_SP72_Essential_Glam_Kit.zip", Installed = false });
             Sims4DLCs.Add(new Sims4DLC { Code = "SP73", Name = "The Sims 4 Modern Retreat Kit", Url = "https://minio.lamonski.pl/sims4dlcs/My_Private_Stuff_SP73_Modern_Retreat_Kit.zip", Installed = false });
@@ -136,15 +136,24 @@ namespace sims4_updater.Models
                 {
                     logger.AddLog($"Downloading DLC: {dlc.Code} - {dlc.Name}");
 
-                    await dlc.Download(logger);
+
+                    bool success = await dlc.Download(logger);
+
+                    if (!success)
+                    {
+                        logger.AddLog($"❌ Failed to download DLC: {dlc.Code} - {dlc.Name}");
+                        logger.AddLog("Skipping this DLC and continuing with next one...");
+                        logger.AddLog("---------------------------------------------");
+                        continue;
+                    }
 
                     logger.AddLog($"Extracting DLC: {dlc.Code} - {dlc.Name}");
-                    await Task.Run(() => dlc.Extract(logger));
+                    dlc.Extract(logger);
 
                     logger.AddLog($"Installing DLC: {dlc.Code} - {dlc.Name}");
-                    await Task.Run(() => dlc.Install(gamepath, logger));
+                    dlc.Install(gamepath, logger);
 
-                    logger.AddLog($"Installed DLC: {dlc.Code} - {dlc.Name}");
+                    logger.AddLog($"✓ Installed DLC: {dlc.Code} - {dlc.Name}");
                     logger.AddLog($"Clearing TEMP files");
                     await Task.Run(() => dlc.Remove(logger));
 
@@ -152,7 +161,7 @@ namespace sims4_updater.Models
                 }
             }
 
-            logger.AddLog("All downloads completed. Logged out from Mega.");
+            logger.AddLog("All downloads completed.");
         }
       
 

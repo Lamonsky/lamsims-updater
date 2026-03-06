@@ -1,8 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using sims4_updater.Helpers;
-using System.IO;
-using System.Net.Http;
 using Downloader;
+using sims4_updater.Helpers;
+using sims4_updater.Services;
+using System.IO;
+using static sims4_updater.Services.FileDownloader;
 
 namespace sims4_updater.Models
 {
@@ -23,7 +24,7 @@ namespace sims4_updater.Models
         private bool _toInstall = false;
         private string _downloadFolder = string.Empty;
 
-        public async Task Download(Logger logger)
+        public async Task<bool> Download(Logger logger)
         {
             _downloadFolder = System.IO.Path.Combine(System.IO.Path.GetTempPath(), "Sims4DLCs");
 
@@ -64,7 +65,7 @@ namespace sims4_updater.Models
             downloader.DownloadProgressChanged += (sender, e) =>
             {
                 StaticsVariables.Instance.Progress = e.ProgressPercentage;
-                StaticsVariables.Instance.DownloadSizeInfo = 
+                StaticsVariables.Instance.DownloadSizeInfo =
                     $"{FormatFileSize(e.ReceivedBytesSize)} / {FormatFileSize(e.TotalBytesToReceive)} ({e.ProgressPercentage:0.##}%)";
 
                 if ((DateTime.Now - lastLogTime).TotalSeconds >= 1)
@@ -93,15 +94,16 @@ namespace sims4_updater.Models
             try
             {
                 await downloader.DownloadFileTaskAsync(Url, outputFilePath);
-                
+
                 StaticsVariables.Instance.Progress = 100;
                 var finalSize = new FileInfo(outputFilePath).Length;
                 StaticsVariables.Instance.DownloadSizeInfo = $"{FormatFileSize(finalSize)} / {FormatFileSize(finalSize)}";
+                return true;
             }
             catch (Exception ex)
             {
                 logger.AddLog($"Download failed: {ex.Message}");
-                throw;
+                return false;
             }
         }
 
@@ -137,15 +139,14 @@ namespace sims4_updater.Models
                     throw new InvalidOperationException("Extracted folder not found.");
                 }
 
-                string[] subfolders = System.IO.Directory.GetDirectories(extrackedFolder);
-
-                extrackedFolder = subfolders[0];
+                string[] subfolders = System.IO.Directory.GetDirectories(extrackedFolder);                
 
                 // Copy extracted files to the game path
                 foreach (string file in System.IO.Directory.GetFiles(extrackedFolder, "*", System.IO.SearchOption.AllDirectories))
                 {
                     string relativePath = System.IO.Path.GetRelativePath(extrackedFolder, file);
-                    string destinationPath = System.IO.Path.Combine(gamepath, Code, relativePath);
+                    string destinationPath = System.IO.Path.Combine(gamepath, relativePath);
+                    logger.AddLog($"Copying {file} to {destinationPath}");
                     // Ensure the destination directory exists
                     string? destinationDir = System.IO.Path.GetDirectoryName(destinationPath);
                     if (!string.IsNullOrEmpty(destinationDir) && !System.IO.Directory.Exists(destinationDir))

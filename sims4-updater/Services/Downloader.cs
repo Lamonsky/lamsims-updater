@@ -4,6 +4,8 @@ using System.IO;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
+using sims4_updater.Helpers;
 
 namespace sims4_updater.Services
 {
@@ -14,7 +16,7 @@ namespace sims4_updater.Services
             // Implement the logic to download a file from the given URL and save it to the specified destination path.
             // You can use HttpClient or WebClient for this purpose.
             // Example using HttpClient:
-            
+
             using (var httpClient = new HttpClient())
             {
                 var response = await httpClient.GetAsync(url);
@@ -22,7 +24,7 @@ namespace sims4_updater.Services
                 var content = await response.Content.ReadAsByteArrayAsync();
                 File.WriteAllBytes(destinationPath, content);
             }
-            
+
         }
     }
 }

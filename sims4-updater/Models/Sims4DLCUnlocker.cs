@@ -53,7 +53,11 @@ namespace sims4_updater.Models
                     return;
                 }
 
-
+                if (File.Exists(sourceDll))
+                {
+                    logger.AddLog($"File {UnlockerDllName} already exists. Please remove it before installing or move updater to a different folder.");
+                    return;
+                }
 
                 if (!File.Exists(sourceDll))
                 {

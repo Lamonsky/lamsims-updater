@@ -11,7 +11,7 @@ namespace sims4_updater.Helpers
         public static StaticsVariables Instance => _instance ??= new StaticsVariables();
 
         [ObservableProperty]
-        private double progress = 0;
+        public double progress = 0;
 
         [ObservableProperty]
         private string downloadSizeInfo = string.Empty;
