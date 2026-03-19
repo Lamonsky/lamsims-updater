@@ -1,9 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using Downloader;
+using Minio;
+using Minio.DataModel.Args;
 using sims4_updater.Helpers;
 using sims4_updater.Services;
 using System.IO;
-using static sims4_updater.Services.FileDownloader;
+using System.Windows.Input;
 
 namespace sims4_updater.Models
 {
@@ -39,61 +40,62 @@ namespace sims4_updater.Models
             {
                 System.IO.File.Delete(outputFilePath);
             }
-
-            var downloadOpt = new DownloadConfiguration()
-            {
-                ChunkCount = 8, // wielowątkowe pobieranie
-                ParallelDownload = true,
-                MaxTryAgainOnFailure = 5, // retry logic
-                MaximumBytesPerSecond = 0, // bez limitu prędkości
-                HttpClientTimeout = 30000, // timeout per chunk
-                BufferBlockSize = 8192,
-                RequestConfiguration = new RequestConfiguration()
-                {
-                    KeepAlive = true,
-                    ConnectTimeout = 30000
-                }
-            };
-
-            var downloader = new DownloadService(downloadOpt);
+            
 
             logger.AddLog($"Starting download DLC: {Name}");
             logger.AddLog($"URL: {Url}");
 
             var lastLogTime = DateTime.Now;
 
-            downloader.DownloadProgressChanged += (sender, e) =>
-            {
-                StaticsVariables.Instance.Progress = e.ProgressPercentage;
-                StaticsVariables.Instance.DownloadSizeInfo =
-                    $"{FormatFileSize(e.ReceivedBytesSize)} / {FormatFileSize(e.TotalBytesToReceive)} ({e.ProgressPercentage:0.##}%)";
+            string s3_filename = Url.Replace("https:///minio.lamonski.pl//sims4dlcs//", "");
+            string bucketname = "sims4dlcs";
 
-                if ((DateTime.Now - lastLogTime).TotalSeconds >= 1)
-                {
-                    logger.AddLog($"Downloaded: {FormatFileSize(e.ReceivedBytesSize)} / {FormatFileSize(e.TotalBytesToReceive)} ({e.ProgressPercentage:0.##}%)");
-                    lastLogTime = DateTime.Now;
-                }
-            };
+            IMinioClient minioClient = new MinioClient()
+                              .WithEndpoint("minio.lamonski.pl")
+                              .WithSSL()
+                              .Build();
 
-            downloader.DownloadFileCompleted += (sender, e) =>
-            {
-                if (e.Error != null)
-                {
-                    logger.AddLog($"Download failed: {e.Error.Message}");
-                }
-                else if (e.Cancelled)
-                {
-                    logger.AddLog("Download cancelled");
-                }
-                else
-                {
-                    logger.AddLog($"Download complete: {FormatFileSize(new FileInfo(outputFilePath).Length)}");
-                }
-            };
+            StatObjectArgs statObjectArgs = new StatObjectArgs()
+                                        .WithBucket(bucketname)
+                                        .WithObject(s3_filename);
+
+            var objectStat = await minioClient.StatObjectAsync(statObjectArgs);
+            long totalSize = objectStat.Size;
+
+
+            // Gets the object's data and stores it in photo.jpg
+            GetObjectArgs getObjectArgs = new GetObjectArgs()
+                                              .WithBucket(bucketname)
+                                              .WithObject(s3_filename)
+                                              .WithCallbackStream((stream) =>
+                                              {
+                                                  using (var fileStream = File.Create(outputFilePath))
+                                                  {
+                                                      byte[] buffer = new byte[8192];
+                                                      int bytesRead;
+                                                      long totalBytesRead = 0;
+
+                                                      while ((bytesRead = stream.Read(buffer, 0, buffer.Length)) > 0)
+                                                      {
+                                                          fileStream.Write(buffer, 0, bytesRead);
+                                                          totalBytesRead += bytesRead;
+
+                                                          double percent = (double)totalBytesRead / totalSize * 100.0;
+                                                          StaticsVariables.Instance.Progress = (int)percent;
+                                                          StaticsVariables.Instance.DownloadSizeInfo =
+                                                              $"{FormatFileSize(totalBytesRead)} / {FormatFileSize(totalSize)}";
+                                                      }
+                                                  }
+                                              })
+                                              .WithFile(outputFilePath);
+                                              
 
             try
             {
-                await downloader.DownloadFileTaskAsync(Url, outputFilePath);
+                logger.AddLog($"Initiating download to: {outputFilePath}");
+
+                await minioClient.GetObjectAsync(getObjectArgs);
+
 
                 StaticsVariables.Instance.Progress = 100;
                 var finalSize = new FileInfo(outputFilePath).Length;
