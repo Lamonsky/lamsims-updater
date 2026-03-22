@@ -25,3 +25,7 @@ Just remember to hit 'Scan' every time you finish downloading an DLC so app will
 
 ## Disclaimer
 Im planning to add updater for the game itself, but it will take more time.
+
+## Patreon
+If you want to support my work and let me focus more on the app you can do that on Patreon
+[Pateron](https://patreon.com/LamonSky?utm_medium=unknown&utm_source=join_link&utm_campaign=creatorshare_creator&utm_content=copyLink)
