@@ -8,6 +8,10 @@ What does it mean for you?
 You need legit Sims 4 Base Game from EA App.
 This app only allow for downloading DLCs and packs and Unlocks them for your Legit Base Game.
 
+## Requirements
+App is currently working only on PC with legit base game
+Either Steam EA App or Origin is working
+
 ## How to use?
 1. Download the latest lamsims-updater.exe file from Release section on right side of site
 1. Run EXE file.
