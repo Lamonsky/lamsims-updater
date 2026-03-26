@@ -135,7 +135,12 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
             <Button Grid.Column="0" 
+                    Grid.Row="0"
                     Content="Install DLCs" 
                     Command="{Binding InstallDLCCommand}"
                     Margin="10,0,10,0"
@@ -143,31 +148,37 @@
                     FontSize="20"
                     FontWeight="SemiBold"/>
             <Button Grid.Column="1" 
+                    Grid.Row="0"
                     Content="Install DLC Unlocker" 
                     Command="{Binding InstallDLCUnlockerCommand}"
                     Margin="10,0,10,0"
                     Height="50"
                     FontSize="20"
                     FontWeight="SemiBold"/>
-            <Grid Grid.Column="2" Margin="10,5">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
-                <Button Content="GitHub" 
+            <Button Grid.Column="1" 
+                    Grid.Row="1"
+                    Content="Remove DLC Unlocker" 
+                    Command="{Binding RemoveDLCUnlockerCommand}"
+                    Margin="10,0,10,0"
+                    Height="50"
+                    FontSize="20"
+                    FontWeight="SemiBold"/>
+            <Button Grid.Column="2"
+                    Grid.Row="0"
+                    Content="GitHub" 
                     Command="{Binding GitHubLinkCommand}"
                     Foreground="{DynamicResource CrustBrush}"
                     Padding="15,5"
                     FontSize="12"
                     FontWeight="SemiBold"
                     Margin="0,5,0,0"/>
-                <StackPanel Grid.Row="1" Orientation="Vertical" VerticalAlignment="Center">
-                    <TextBlock Text="{Binding CurrentVersion, StringFormat='v{0}'}" 
+            <StackPanel Grid.Column="2" Grid.Row="1" Orientation="Vertical" VerticalAlignment="Center">
+                <TextBlock Text="{Binding CurrentVersion, StringFormat='v{0}'}" 
                           FontSize="11" 
                           Margin="0,5,0,0"
                           Foreground="{DynamicResource Subtext0Brush}"
                           HorizontalAlignment="Right"/>
-                    <Button Content="Update App" 
+                <Button Content="Update App" 
                         Command="{Binding DownloadUpdateCommand}"
                         Visibility="{Binding IsUpdateAvailable, Converter={StaticResource BooleanToVisibilityConverter}}"
                         Foreground="{DynamicResource CrustBrush}"
@@ -175,9 +186,8 @@
                         FontSize="12"
                         FontWeight="SemiBold"
                         Margin="0,5,0,0"/>
-                </StackPanel>
-            </Grid>
-            
+            </StackPanel>
+
         </Grid>
 
 

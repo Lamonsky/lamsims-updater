@@ -161,6 +161,13 @@ namespace sims4_updater.ViewModel
         }
 
         [RelayCommand]
+        private async Task RemoveDLCUnlocker()
+        {
+            Logger.AddLog("Starting DLC Unlocker removal...");
+            await Sims4DLCUnlocker.RemoveUnlocker(Logger);
+        }
+
+        [RelayCommand]
         private void SelectAll()
         {
             foreach (var dlc in Sims4Model.AllDlcs.Sims4DLCs)
