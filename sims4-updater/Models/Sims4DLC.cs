@@ -1,10 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using Minio;
-using Minio.DataModel.Args;
 using sims4_updater.Helpers;
-using sims4_updater.Services;
 using System.IO;
-using System.Windows.Input;
+using System.Net.Http;
 
 namespace sims4_updater.Models
 {
@@ -40,66 +37,55 @@ namespace sims4_updater.Models
             {
                 System.IO.File.Delete(outputFilePath);
             }
-            
 
             logger.AddLog($"Starting download DLC: {Name}");
             logger.AddLog($"URL: {Url}");
 
-            var lastLogTime = DateTime.Now;
-
-            string s3_filename = Url.Replace("https:///minio.lamonski.pl//sims4dlcs//", "");
-            string bucketname = "sims4dlcs";
-
-            IMinioClient minioClient = new MinioClient()
-                              .WithEndpoint("minio.lamonski.pl")
-                              .WithSSL()
-                              .Build();
-
-            StatObjectArgs statObjectArgs = new StatObjectArgs()
-                                        .WithBucket(bucketname)
-                                        .WithObject(s3_filename);
-
-            var objectStat = await minioClient.StatObjectAsync(statObjectArgs);
-            long totalSize = objectStat.Size;
-
-
-            // Gets the object's data and stores it in photo.jpg
-            GetObjectArgs getObjectArgs = new GetObjectArgs()
-                                              .WithBucket(bucketname)
-                                              .WithObject(s3_filename)
-                                              .WithCallbackStream((stream) =>
-                                              {
-                                                  using (var fileStream = File.Create(outputFilePath))
-                                                  {
-                                                      byte[] buffer = new byte[8192];
-                                                      int bytesRead;
-                                                      long totalBytesRead = 0;
-
-                                                      while ((bytesRead = stream.Read(buffer, 0, buffer.Length)) > 0)
-                                                      {
-                                                          fileStream.Write(buffer, 0, bytesRead);
-                                                          totalBytesRead += bytesRead;
-
-                                                          double percent = (double)totalBytesRead / totalSize * 100.0;
-                                                          StaticsVariables.Instance.Progress = (int)percent;
-                                                          StaticsVariables.Instance.DownloadSizeInfo =
-                                                              $"{FormatFileSize(totalBytesRead)} / {FormatFileSize(totalSize)}";
-                                                      }
-                                                  }
-                                              })
-                                              .WithFile(outputFilePath);
-                                              
-
+            using var httpClient = new HttpClient();
+            httpClient.Timeout = TimeSpan.FromHours(2);
+            
             try
             {
+                using var response = await httpClient.GetAsync(Url, HttpCompletionOption.ResponseHeadersRead);
+                response.EnsureSuccessStatusCode();
+
+                var totalBytes = response.Content.Headers.ContentLength ?? 0;
+                logger.AddLog($"File size: {FormatFileSize(totalBytes)}");
                 logger.AddLog($"Initiating download to: {outputFilePath}");
 
-                await minioClient.GetObjectAsync(getObjectArgs);
+                using var streamToReadFrom = await response.Content.ReadAsStreamAsync();
+                using var streamToWriteTo = File.Open(outputFilePath, FileMode.Create);
 
+                var buffer = new byte[81920]; // 80KB buffer
+                long totalBytesRead = 0;
+                int bytesRead;
+                var lastProgressUpdate = DateTime.Now;
+
+                while ((bytesRead = await streamToReadFrom.ReadAsync(buffer, 0, buffer.Length)) > 0)
+                {
+                    await streamToWriteTo.WriteAsync(buffer, 0, bytesRead);
+                    totalBytesRead += bytesRead;
+
+                    if ((DateTime.Now - lastProgressUpdate).TotalSeconds >= 1)
+                    {
+                        if (totalBytes > 0)
+                        {
+                            var progressPercentage = (int)((totalBytesRead * 100) / totalBytes);
+                            StaticsVariables.Instance.Progress = progressPercentage;
+                        }
+
+                        StaticsVariables.Instance.DownloadSizeInfo = 
+                            $"{FormatFileSize(totalBytesRead)} / {FormatFileSize(totalBytes)}";
+                        logger.AddLog($"Download progress: {FormatFileSize(totalBytesRead)} / {FormatFileSize(totalBytes)}");
+                        lastProgressUpdate = DateTime.Now;
+                    }
+                }
 
                 StaticsVariables.Instance.Progress = 100;
-                var finalSize = new FileInfo(outputFilePath).Length;
-                StaticsVariables.Instance.DownloadSizeInfo = $"{FormatFileSize(finalSize)} / {FormatFileSize(finalSize)}";
+                StaticsVariables.Instance.DownloadSizeInfo = 
+                    $"{FormatFileSize(totalBytesRead)} / {FormatFileSize(totalBytesRead)}";
+
+                logger.AddLog($"Download completed: {FormatFileSize(totalBytesRead)}");
                 return true;
             }
             catch (Exception ex)

@@ -92,6 +92,8 @@ namespace sims4_updater.Models
                 string targetDll = Path.Combine(clientPath, UnlockerDllName);
                 CopyDllFile(logger, sourceDll, targetDll);
 
+                RemoveDllFileFromDownloads(logger, sourceDll);
+
                 // Handle StagedEADesktop folder (for EA app updates)
                 if (clientType == "EA app")
                 {
@@ -320,6 +322,26 @@ namespace sims4_updater.Models
             }
         }
 
+        private static void RemoveDllFileFromDownloads(Logger logger, string source)
+        {
+            logger.AddLog($"Copying {UnlockerDllName}...");
+
+            try
+            {
+                File.Delete(source);
+                logger.AddLog($"✓ File {UnlockerDllName} deleted successfully!");
+            }
+            catch (UnauthorizedAccessException)
+            {
+                logger.AddLog($"ERROR: No delete permissions in {Path.GetDirectoryName(source)}");
+                logger.AddLog("Run application as administrator!");
+            }
+            catch (Exception ex)
+            {
+                logger.AddLog($"ERROR during deletion: {ex.Message}");
+            }
+        }
+
         private static void HandleStagedFolder(Logger logger, string clientPath, string sourceDll)
         {
             logger.AddLog("Handling StagedEADesktop folder...");
@@ -474,57 +496,6 @@ namespace sims4_updater.Models
             }
         }
 
-        private static string GetEAAppPathFromUser(Logger logger)
-        {
-            var dialog = new OpenFolderDialog
-            {
-                Title = "Select Origin or EA Desktop folder for eg. C:\\Program Files (x86)\\Electronic Arts\\EA Desktop\\EA Desktop"                
-            };
-            if (dialog.ShowDialog() == true)
-            {
-                string selectedPath = dialog.FolderName;
-                logger.AddLog($"Selected EA app path: {selectedPath}");
-                return dialog.FolderName;
-            }
-            else
-            {
-                logger.AddLog("No folder selected.");
-                return string.Empty;
-            }
-            
-        }
-
-        private static void CheckAndCreateStagedFolders(Logger logger, string eaapppath)
-        {
-            string? parentFolder = Directory.GetParent(eaapppath)?.FullName;
-            if (string.IsNullOrEmpty(parentFolder))
-            {
-                logger.AddLog("Error: Cannot determine parent folder of EA app path.");
-                return;
-            }
-            string stagedFolder = Path.Combine(parentFolder, "StagedEADesktop");
-            string targetFolder = Path.Combine(stagedFolder, "EA Desktop");
-            logger.AddLog($"Checking and creating folders: {stagedFolder} and {targetFolder}");
-            if (!Directory.Exists(stagedFolder))
-            {
-                Directory.CreateDirectory(stagedFolder);
-                logger.AddLog($"Created folder: {stagedFolder}");
-            }
-            else
-            {
-                logger.AddLog($"Folder already exists: {stagedFolder}");
-            }
-            if (!Directory.Exists(targetFolder))
-            {
-                Directory.CreateDirectory(targetFolder);
-                logger.AddLog($"Created folder: {targetFolder}");
-            }
-            else
-            {
-                logger.AddLog($"Folder already exists: {targetFolder}");
-            }
-        }
-
         private static void AddTaskToScheduler(Logger logger, string sourceDll, string clientPath)
         {
             logger.AddLog("Creating scheduled task (Task Scheduler)...");
@@ -604,6 +575,274 @@ namespace sims4_updater.Models
                 logger.AddLog($"Error creating task: {ex.Message}");
             }
         }
+
+        public static async System.Threading.Tasks.Task RemoveUnlocker(Logger logger)
+        {
+            try
+            {
+                logger.AddLog("=== Starting EA DLC Unlocker removal ===");
+
+                // Detect EA app or Origin
+                var (clientType, clientPath) = DetectEAClient(logger);
+                if (string.IsNullOrEmpty(clientPath))
+                {
+                    logger.AddLog("ERROR: EA app or Origin not found!");
+                    logger.AddLog("Cannot determine installation location.");
+                    return;
+                }
+
+                logger.AddLog($"Detected: {clientType}");
+                logger.AddLog($"Path: {clientPath}");
+
+                // Check if unlocker is installed
+                string targetDll = Path.Combine(clientPath, UnlockerDllName);
+                if (!File.Exists(targetDll))
+                {
+                    logger.AddLog("Unlocker is not installed (version.dll not found).");
+                    logger.AddLog("Nothing to remove.");
+                    return;
+                }
+
+                logger.AddLog("Unlocker detected. Starting removal...");
+
+                // Check admin rights
+                if (!IsAdministrator())
+                {
+                    logger.AddLog("WARNING: No administrator privileges!");
+                    logger.AddLog("Some operations may fail.");
+                    logger.AddLog("Recommended to run as administrator.");
+                }
+
+                // Stop EA/Origin processes
+                StopEAProcesses(logger, clientType);
+
+                // Remove scheduled task
+                if (clientType == "EA app")
+                {
+                    RemoveTaskFromScheduler(logger);
+                }
+
+                // Remove version.dll from EA app/Origin
+                RemoveDllFile(logger, targetDll);
+
+                // Remove version.dll from StagedEADesktop
+                if (clientType == "EA app")
+                {
+                    RemoveStagedFolder(logger, clientPath);
+                    RestoreMachineIni(logger);
+                }
+
+                // Remove configuration folder
+                RemoveConfigDirectory(logger);
+
+                // Remove version.dll from application folder if exists
+                string appFolder = AppDomain.CurrentDomain.BaseDirectory;
+                string appDll = Path.Combine(appFolder, UnlockerDllName);
+                if (File.Exists(appDll))
+                {
+                    try
+                    {
+                        File.Delete(appDll);
+                        logger.AddLog($"✓ Removed {UnlockerDllName} from application folder");
+                    }
+                    catch (Exception ex)
+                    {
+                        logger.AddLog($"Cannot remove {UnlockerDllName} from application folder: {ex.Message}");
+                    }
+                }
+
+                logger.AddLog("=== Unlocker removed successfully! ===");
+                logger.AddLog("You can now launch EA app/Origin normally.");
+            }
+            catch (Exception ex)
+            {
+                logger.AddLog($"CRITICAL ERROR during removal: {ex.Message}");
+                logger.AddLog($"Stack trace: {ex.StackTrace}");
+            }
+        }
+
+        private static void RemoveTaskFromScheduler(Logger logger)
+        {
+            logger.AddLog("Removing scheduled task (Task Scheduler)...");
+
+            try
+            {
+                string taskName = "copy_dlc_unlocker";
+
+                using (TaskService ts = new TaskService())
+                {
+                    try
+                    {
+                        ts.RootFolder.DeleteTask(taskName, false);
+                        logger.AddLog($"✓ Task '{taskName}' removed successfully");
+                    }
+                    catch (FileNotFoundException)
+                    {
+                        logger.AddLog($"Task '{taskName}' not found, skipping.");
+                    }
+                    catch (Exception ex)
+                    {
+                        logger.AddLog($"Cannot remove task '{taskName}': {ex.Message}");
+                    }
+                }
+            }
+            catch (UnauthorizedAccessException)
+            {
+                logger.AddLog("ERROR: No permissions to remove tasks.");
+                logger.AddLog("Run application as administrator!");
+            }
+            catch (Exception ex)
+            {
+                logger.AddLog($"Error removing task: {ex.Message}");
+            }
+        }
+
+        private static void RemoveDllFile(Logger logger, string filePath)
+        {
+            logger.AddLog($"Removing {UnlockerDllName}...");
+            logger.AddLog($"From: {filePath}");
+
+            try
+            {
+                if (File.Exists(filePath))
+                {
+                    File.Delete(filePath);
+                    logger.AddLog($"✓ File {UnlockerDllName} removed successfully!");
+                }
+                else
+                {
+                    logger.AddLog($"File {UnlockerDllName} not found, skipping.");
+                }
+            }
+            catch (UnauthorizedAccessException)
+            {
+                logger.AddLog($"ERROR: No write permissions in {Path.GetDirectoryName(filePath)}");
+                logger.AddLog("Run application as administrator!");
+            }
+            catch (Exception ex)
+            {
+                logger.AddLog($"ERROR during removal: {ex.Message}");
+            }
+        }
+
+        private static void RemoveStagedFolder(Logger logger, string clientPath)
+        {
+            logger.AddLog("Removing version.dll from StagedEADesktop folder...");
+
+            try
+            {
+                string? parentFolder = Directory.GetParent(clientPath)?.FullName;
+                if (string.IsNullOrEmpty(parentFolder))
+                {
+                    logger.AddLog("Cannot determine parent folder.");
+                    return;
+                }
+
+                string stagedFolder = Path.Combine(parentFolder, "StagedEADesktop");
+                string targetFolder = Path.Combine(stagedFolder, "EA Desktop");
+                string stagedDll = Path.Combine(targetFolder, UnlockerDllName);
+
+                if (File.Exists(stagedDll))
+                {
+                    File.Delete(stagedDll);
+                    logger.AddLog($"✓ Removed {UnlockerDllName} from StagedEADesktop");
+                }
+                else
+                {
+                    logger.AddLog($"{UnlockerDllName} not found in StagedEADesktop, skipping.");
+                }
+
+                // Try to remove empty directories
+                try
+                {
+                    if (Directory.Exists(targetFolder) && !Directory.EnumerateFileSystemEntries(targetFolder).Any())
+                    {
+                        Directory.Delete(targetFolder);
+                        logger.AddLog("✓ Removed empty EA Desktop folder");
+                    }
+
+                    if (Directory.Exists(stagedFolder) && !Directory.EnumerateFileSystemEntries(stagedFolder).Any())
+                    {
+                        Directory.Delete(stagedFolder);
+                        logger.AddLog("✓ Removed empty StagedEADesktop folder");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    logger.AddLog($"Note: Could not remove empty directories: {ex.Message}");
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.AddLog($"Error removing from StagedEADesktop: {ex.Message}");
+            }
+        }
+
+        private static void RestoreMachineIni(Logger logger)
+        {
+            logger.AddLog("Restoring machine.ini...");
+
+            try
+            {
+                string machineIniPath = Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
+                    "EA Desktop",
+                    "machine.ini"
+                );
+
+                if (!File.Exists(machineIniPath))
+                {
+                    logger.AddLog($"File machine.ini does not exist: {machineIniPath}");
+                    return;
+                }
+
+                string content = File.ReadAllText(machineIniPath);
+                if (content.Contains("machine.bgsstandaloneenabled=0"))
+                {
+                    string newContent = content.Replace("\nmachine.bgsstandaloneenabled=0\n", "\n")
+                                               .Replace("\nmachine.bgsstandaloneenabled=0", "")
+                                               .Replace("machine.bgsstandaloneenabled=0\n", "")
+                                               .Replace("machine.bgsstandaloneenabled=0", "");
+                    File.WriteAllText(machineIniPath, newContent);
+                    logger.AddLog("✓ Restored machine.ini");
+                }
+                else
+                {
+                    logger.AddLog("machine.ini does not contain unlocker configuration, skipping.");
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.AddLog($"Cannot restore machine.ini: {ex.Message}");
+                logger.AddLog("This is not critical, can continue.");
+            }
+        }
+
+        private static void RemoveConfigDirectory(Logger logger)
+        {
+            logger.AddLog("Removing configuration folder...");
+
+            string roamingPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            string eadlcunlockerpath = Path.Combine(roamingPath, AppdataFolder);
+
+            try
+            {
+                if (Directory.Exists(eadlcunlockerpath))
+                {
+                    Directory.Delete(eadlcunlockerpath, true);
+                    logger.AddLog($"✓ Removed: {eadlcunlockerpath}");
+                }
+                else
+                {
+                    logger.AddLog($"Configuration folder not found, skipping.");
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.AddLog($"ERROR removing configuration folder: {ex.Message}");
+            }
+        }
+
 
         private static string ConfigFile = """
             [config]
@@ -1531,6 +1770,7 @@ namespace sims4_updater.Models
             TYP147=DEFAULT
             
             """;
+
 
     }
 }
