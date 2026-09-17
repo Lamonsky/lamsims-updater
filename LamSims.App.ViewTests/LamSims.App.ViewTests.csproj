@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia.Headless.XUnit" Version="12.0.4" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+    <PackageReference Include="xunit.v3" Version="3.2.2" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LamSims.App\LamSims.App.csproj" />
+    <ProjectReference Include="..\LamSims.Core\LamSims.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Read as XML by SelectorSweepTests. Embedded rather than located on disk so the same build
+         that compiles the assertion refreshes the copy it reads. -->
+    <EmbeddedResource Include="..\LamSims.App\Themes\Controls.axaml" LogicalName="Controls.axaml" />
+  </ItemGroup>
+
+</Project>

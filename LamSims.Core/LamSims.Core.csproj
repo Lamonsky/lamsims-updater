@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$(MSBuildThisFileDirectory)../Version.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="LamSims.Core.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Extracted verbatim from the upstream unlocker's two raw string literals. Resources rather
+         than C# literals: 980 lines of ini in a .cs file is data pretending to be code, and the DLC
+         list needs to stay diffable. -->
+    <EmbeddedResource Include="Unlocking\Resources\config.ini"
+                      LogicalName="LamSims.Core.Unlocking.Resources.config.ini" />
+    <EmbeddedResource Include="Unlocking\Resources\g_The Sims 4.ini"
+                      LogicalName="LamSims.Core.Unlocking.Resources.dlc-list.ini" />
+  </ItemGroup>
+
+</Project>

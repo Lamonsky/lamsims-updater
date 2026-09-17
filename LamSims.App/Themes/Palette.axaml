@@ -1,0 +1,162 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <!-- Catppuccin Mocha, carried over verbatim from the upstream WPF app's theme. The palette
+       ports directly; none of upstream's templates do. -->
+  <Color x:Key="CatppuccinBase">#1e1e2e</Color>
+  <Color x:Key="CatppuccinMantle">#181825</Color>
+  <Color x:Key="CatppuccinCrust">#11111b</Color>
+  <Color x:Key="CatppuccinSurface0">#313244</Color>
+  <Color x:Key="CatppuccinSurface1">#45475a</Color>
+  <Color x:Key="CatppuccinSurface2">#585b70</Color>
+  <Color x:Key="CatppuccinOverlay0">#6c7086</Color>
+  <Color x:Key="CatppuccinOverlay1">#7f849c</Color>
+  <Color x:Key="CatppuccinOverlay2">#9399b2</Color>
+  <Color x:Key="CatppuccinText">#cdd6f4</Color>
+  <Color x:Key="CatppuccinSubtext1">#bac2de</Color>
+  <Color x:Key="CatppuccinSubtext0">#a6adc8</Color>
+  <Color x:Key="CatppuccinLavender">#b4befe</Color>
+  <Color x:Key="CatppuccinBlue">#89b4fa</Color>
+  <Color x:Key="CatppuccinSapphire">#74c7ec</Color>
+  <Color x:Key="CatppuccinSky">#89dceb</Color>
+  <Color x:Key="CatppuccinTeal">#94e2d5</Color>
+  <Color x:Key="CatppuccinGreen">#a6e3a1</Color>
+  <Color x:Key="CatppuccinYellow">#f9e2af</Color>
+  <Color x:Key="CatppuccinPeach">#fab387</Color>
+  <Color x:Key="CatppuccinMaroon">#eba0ac</Color>
+  <Color x:Key="CatppuccinRed">#f38ba8</Color>
+  <Color x:Key="CatppuccinMauve">#cba6f7</Color>
+  <Color x:Key="CatppuccinPink">#f5c2e7</Color>
+  <Color x:Key="CatppuccinFlamingo">#f2cdcd</Color>
+  <Color x:Key="CatppuccinRosewater">#f5e0dc</Color>
+
+  <SolidColorBrush x:Key="BaseBrush" Color="{StaticResource CatppuccinBase}"/>
+  <SolidColorBrush x:Key="MantleBrush" Color="{StaticResource CatppuccinMantle}"/>
+  <SolidColorBrush x:Key="CrustBrush" Color="{StaticResource CatppuccinCrust}"/>
+  <SolidColorBrush x:Key="Surface0Brush" Color="{StaticResource CatppuccinSurface0}"/>
+  <SolidColorBrush x:Key="Surface1Brush" Color="{StaticResource CatppuccinSurface1}"/>
+  <SolidColorBrush x:Key="Surface2Brush" Color="{StaticResource CatppuccinSurface2}"/>
+  <SolidColorBrush x:Key="Overlay0Brush" Color="{StaticResource CatppuccinOverlay0}"/>
+  <SolidColorBrush x:Key="Overlay1Brush" Color="{StaticResource CatppuccinOverlay1}"/>
+  <SolidColorBrush x:Key="Overlay2Brush" Color="{StaticResource CatppuccinOverlay2}"/>
+  <SolidColorBrush x:Key="TextBrush" Color="{StaticResource CatppuccinText}"/>
+  <SolidColorBrush x:Key="Subtext1Brush" Color="{StaticResource CatppuccinSubtext1}"/>
+  <SolidColorBrush x:Key="Subtext0Brush" Color="{StaticResource CatppuccinSubtext0}"/>
+  <SolidColorBrush x:Key="LavenderBrush" Color="{StaticResource CatppuccinLavender}"/>
+  <SolidColorBrush x:Key="BlueBrush" Color="{StaticResource CatppuccinBlue}"/>
+  <SolidColorBrush x:Key="SapphireBrush" Color="{StaticResource CatppuccinSapphire}"/>
+  <SolidColorBrush x:Key="SkyBrush" Color="{StaticResource CatppuccinSky}"/>
+  <SolidColorBrush x:Key="TealBrush" Color="{StaticResource CatppuccinTeal}"/>
+  <SolidColorBrush x:Key="GreenBrush" Color="{StaticResource CatppuccinGreen}"/>
+  <SolidColorBrush x:Key="YellowBrush" Color="{StaticResource CatppuccinYellow}"/>
+  <SolidColorBrush x:Key="PeachBrush" Color="{StaticResource CatppuccinPeach}"/>
+  <SolidColorBrush x:Key="MaroonBrush" Color="{StaticResource CatppuccinMaroon}"/>
+  <SolidColorBrush x:Key="RedBrush" Color="{StaticResource CatppuccinRed}"/>
+  <SolidColorBrush x:Key="MauveBrush" Color="{StaticResource CatppuccinMauve}"/>
+  <SolidColorBrush x:Key="PinkBrush" Color="{StaticResource CatppuccinPink}"/>
+  <SolidColorBrush x:Key="FlamingoBrush" Color="{StaticResource CatppuccinFlamingo}"/>
+  <SolidColorBrush x:Key="RosewaterBrush" Color="{StaticResource CatppuccinRosewater}"/>
+
+
+  <!-- Per-control surfaces the ground cannot get right. -->
+  <SolidColorBrush x:Key="ButtonBackground" Color="{StaticResource CatppuccinSurface0}"/>
+  <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="{StaticResource CatppuccinSurface1}"/>
+  <SolidColorBrush x:Key="ButtonBackgroundPressed" Color="{StaticResource CatppuccinSurface2}"/>
+  <SolidColorBrush x:Key="ButtonBackgroundDisabled" Color="{StaticResource CatppuccinSurface0}"/>
+  <SolidColorBrush x:Key="ButtonForeground" Color="{StaticResource CatppuccinText}"/>
+  <SolidColorBrush x:Key="ButtonForegroundPointerOver" Color="{StaticResource CatppuccinText}"/>
+  <SolidColorBrush x:Key="ButtonForegroundPressed" Color="{StaticResource CatppuccinText}"/>
+  <SolidColorBrush x:Key="ButtonForegroundDisabled" Color="{StaticResource CatppuccinOverlay0}"/>
+  <SolidColorBrush x:Key="ButtonBorderBrush" Color="{StaticResource CatppuccinSurface2}"/>
+  <SolidColorBrush x:Key="ButtonBorderBrushPointerOver" Color="{StaticResource CatppuccinLavender}"/>
+  <SolidColorBrush x:Key="ButtonBorderBrushPressed" Color="{StaticResource CatppuccinSurface2}"/>
+  <SolidColorBrush x:Key="ButtonBorderBrushDisabled" Color="{StaticResource CatppuccinSurface1}"/>
+
+  <SolidColorBrush x:Key="TextControlBackground" Color="{StaticResource CatppuccinSurface0}"/>
+  <SolidColorBrush x:Key="TextControlBackgroundPointerOver" Color="{StaticResource CatppuccinSurface1}"/>
+  <SolidColorBrush x:Key="TextControlBackgroundFocused" Color="{StaticResource CatppuccinSurface0}"/>
+  <SolidColorBrush x:Key="TextControlBackgroundDisabled" Color="{StaticResource CatppuccinSurface0}"/>
+  <SolidColorBrush x:Key="TextControlBorderBrush" Color="{StaticResource CatppuccinSurface2}"/>
+  <SolidColorBrush x:Key="TextControlBorderBrushPointerOver" Color="{StaticResource CatppuccinBlue}"/>
+  <SolidColorBrush x:Key="TextControlBorderBrushFocused" Color="{StaticResource CatppuccinLavender}"/>
+  <SolidColorBrush x:Key="TextControlBorderBrushDisabled" Color="{StaticResource CatppuccinSurface1}"/>
+  <!-- Despite the name Fluent declares this as a brush, and it is the search box's selection
+       highlight: accent-derived, so Windows blue until overridden. -->
+  <SolidColorBrush x:Key="TextControlSelectionHighlightColor" Color="{StaticResource CatppuccinSurface2}"/>
+
+  <!-- Transparent, all eight. These paint PART_Border, which is the whole control: 20 wide by 32
+       tall around a box that is 20 by 20. Filled, it read as a tall pill with a small square
+       inside it and overhung the row's first line by 6px top and bottom. The box below is the
+       only checkbox surface this application wants painted. -->
+  <SolidColorBrush x:Key="CheckBoxBackgroundUnchecked" Color="Transparent"/>
+  <SolidColorBrush x:Key="CheckBoxBackgroundUncheckedPointerOver" Color="Transparent"/>
+  <SolidColorBrush x:Key="CheckBoxBackgroundUncheckedPressed" Color="Transparent"/>
+  <SolidColorBrush x:Key="CheckBoxBackgroundUncheckedDisabled" Color="Transparent"/>
+  <SolidColorBrush x:Key="CheckBoxBackgroundChecked" Color="Transparent"/>
+  <SolidColorBrush x:Key="CheckBoxBackgroundCheckedPointerOver" Color="Transparent"/>
+  <SolidColorBrush x:Key="CheckBoxBackgroundCheckedPressed" Color="Transparent"/>
+  <SolidColorBrush x:Key="CheckBoxBackgroundCheckedDisabled" Color="Transparent"/>
+
+  <!-- The box itself, which with PART_Border transparent is the whole of what a user sees: 20 by
+       20, and the surface the pointer-over state now has to land on. Fluent fills it from the
+       accent, so without these a green tick lands on a Windows-blue square. There is no
+       CheckBoxCheckBackgroundStroke* in Fluent 12.0.4's inventory; the stroke follows this fill,
+       which is also why upstream's green ring around a checked box cannot be reproduced without
+       retemplating the control. The tick carries the green instead. -->
+  <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillUnchecked" Color="Transparent"/>
+  <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillUncheckedPointerOver" Color="{StaticResource CatppuccinSurface1}"/>
+  <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillChecked" Color="{StaticResource CatppuccinSurface1}"/>
+  <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillCheckedPointerOver" Color="{StaticResource CatppuccinSurface2}"/>
+  <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillCheckedPressed" Color="{StaticResource CatppuccinSurface2}"/>
+  <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillCheckedDisabled" Color="{StaticResource CatppuccinSurface0}"/>
+
+  <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundChecked" Color="{StaticResource CatppuccinGreen}"/>
+  <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundCheckedPointerOver" Color="{StaticResource CatppuccinGreen}"/>
+  <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundCheckedPressed" Color="{StaticResource CatppuccinGreen}"/>
+  <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundCheckedDisabled" Color="{StaticResource CatppuccinOverlay0}"/>
+
+  <SolidColorBrush x:Key="ExpanderChevronBackground" Color="Transparent"/>
+  <SolidColorBrush x:Key="ExpanderChevronForeground" Color="{StaticResource CatppuccinText}"/>
+  <SolidColorBrush x:Key="ExpanderChevronBorderBrush" Color="{StaticResource CatppuccinSurface2}"/>
+
+  <!-- The container is the Slider's own backdrop and Transparent is correct for it, but it is not
+       what a user sees: the track, its filled portion and the thumb all resolve from Fluent's
+       accent, which is Windows blue on a Catppuccin window. -->
+  <SolidColorBrush x:Key="SliderContainerBackground" Color="Transparent"/>
+  <SolidColorBrush x:Key="SliderContainerBackgroundPointerOver" Color="Transparent"/>
+
+  <SolidColorBrush x:Key="SliderTrackFill" Color="{StaticResource CatppuccinSurface1}"/>
+  <SolidColorBrush x:Key="SliderTrackFillPointerOver" Color="{StaticResource CatppuccinSurface2}"/>
+  <SolidColorBrush x:Key="SliderTrackFillPressed" Color="{StaticResource CatppuccinSurface2}"/>
+  <SolidColorBrush x:Key="SliderTrackFillDisabled" Color="{StaticResource CatppuccinSurface0}"/>
+
+  <SolidColorBrush x:Key="SliderTrackValueFill" Color="{StaticResource CatppuccinMauve}"/>
+  <SolidColorBrush x:Key="SliderTrackValueFillPointerOver" Color="{StaticResource CatppuccinMauve}"/>
+  <SolidColorBrush x:Key="SliderTrackValueFillPressed" Color="{StaticResource CatppuccinMauve}"/>
+  <SolidColorBrush x:Key="SliderTrackValueFillDisabled" Color="{StaticResource CatppuccinOverlay0}"/>
+
+  <SolidColorBrush x:Key="SliderThumbBackground" Color="{StaticResource CatppuccinMauve}"/>
+  <SolidColorBrush x:Key="SliderThumbBackgroundPointerOver" Color="{StaticResource CatppuccinLavender}"/>
+  <SolidColorBrush x:Key="SliderThumbBackgroundPressed" Color="{StaticResource CatppuccinLavender}"/>
+  <SolidColorBrush x:Key="SliderThumbBackgroundDisabled" Color="{StaticResource CatppuccinOverlay0}"/>
+
+  <!-- The row context menu's popup surface. Popup content is not in the visual tree, so this is
+       checked by eye and by the key name existing in Fluent 12.0.4's inventory. -->
+  <SolidColorBrush x:Key="MenuFlyoutPresenterBackground" Color="{StaticResource CatppuccinMantle}"/>
+  <SolidColorBrush x:Key="MenuFlyoutPresenterBorderBrush" Color="{StaticResource CatppuccinSurface2}"/>
+
+  <SolidColorBrush x:Key="MenuFlyoutItemBackground" Color="Transparent"/>
+  <SolidColorBrush x:Key="MenuFlyoutItemBackgroundPointerOver" Color="{StaticResource CatppuccinSurface1}"/>
+  <SolidColorBrush x:Key="MenuFlyoutItemForeground" Color="{StaticResource CatppuccinText}"/>
+
+  <!-- The focus adorner. Fluent draws a two-tone ring (a primary stroke over a secondary one, so
+       it stays visible on any backdrop) and both keys default to a monochrome white/black pair.
+       No view test covers it; the ring is drawn into an adorner layer that these tests do not
+       reach. -->
+  <SolidColorBrush x:Key="SystemControlFocusVisualPrimaryBrush" Color="{StaticResource CatppuccinLavender}"/>
+  <SolidColorBrush x:Key="SystemControlFocusVisualSecondaryBrush" Color="{StaticResource CatppuccinCrust}"/>
+
+  <SolidColorBrush x:Key="ScrollBarBackground" Color="{StaticResource CatppuccinSurface0}"/>
+  <SolidColorBrush x:Key="ScrollBarBackgroundPointerOver" Color="{StaticResource CatppuccinSurface1}"/>
+
+</ResourceDictionary>

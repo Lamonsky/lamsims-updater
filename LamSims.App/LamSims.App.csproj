@@ -1,0 +1,53 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$(MSBuildThisFileDirectory)../Version.props" />
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+    <!-- Compiled bindings are off: MainWindow's bindings resolve reflectively, and none of its
+         templates carry x:DataType. -->
+    <AvaloniaUseCompiledBindingsByDefault>false</AvaloniaUseCompiledBindingsByDefault>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <PublishSingleFile>true</PublishSingleFile>
+    <!-- Mandatory, measured: without it libSkiaSharp, av_libglesv2 and libHarfBuzzSharp are
+         left beside the exe and the "single file" ships without a renderer. -->
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+    <!-- 103.7 MB -> 49.6 MB, measured. Costs decompression into memory per launch. -->
+    <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+    <!-- Release only. Publish output has no use for our pdbs, but stripping them from Debug builds
+         would cost line numbers in every test failure that runs through this assembly. -->
+    <DebugType Condition="'$(Configuration)' == 'Release'">none</DebugType>
+    <!-- Off deliberately. Compiled bindings are disabled above, so binding resolution is
+         reflective and trimming would break XAML at runtime rather than at build time. -->
+    <PublishTrimmed>false</PublishTrimmed>
+  </PropertyGroup>
+
+  <!-- SelfContained only when publishing with a RuntimeIdentifier: it cannot be applied
+       unconditionally because a self-contained executable cannot be referenced by a
+       non self-contained project (LamSims.App.ViewTests references this project for the
+       ordinary build/test loop, which has no RID). -->
+  <PropertyGroup Condition="'$(RuntimeIdentifier)' != ''">
+    <SelfContained>true</SelfContained>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="12.0.4" />
+    <PackageReference Include="Avalonia.Desktop" Version="12.0.4" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="12.0.4" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="12.0.4" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LamSims.Core\LamSims.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="LamSims.App.Tests" />
+  </ItemGroup>
+
+</Project>

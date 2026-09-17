@@ -1,0 +1,403 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:LamSims.App"
+        x:Class="LamSims.App.MainWindow"
+        Width="900" Height="640"
+        MinWidth="760" MinHeight="560"
+        Title="LamSims Updater">
+  <DockPanel Margin="12">
+
+    <!-- While shutdown waits for the runner the content stays visible and goes
+         inert. Bound on the three content blocks rather than on the DockPanel so the stopping
+         notice below is not dimmed along with the controls it explains. -->
+    <!-- The region is bounded as a WHOLE, and this is the outermost of three nested scrolls
+         rather than a replacement for the two inside it. Those bound the two lists that GROW
+         without limit - the unlocker's targets, the banner run - and they are what keeps the game
+         folder and the catalog box in place when those lists get long. Neither bounds the region:
+         a section's FIXED parts (two button rows, the detection notes, the progress row) sit
+         outside both caps, so one expanded section still took the window.
+
+         Measured, not chosen. With the DLC Unlocker open the region wants 429px whatever the
+         window height, and it is docked to the top of a DockPanel, so the pack list and the log
+         divide what is left: 69px each at the 560 minimum and 149 at the 640 default, against the
+         100px floor the layout tests hold the log to. A literal MaxHeight cannot fix that - below
+         429 it clips a section even at 1000px where there is room, above it, it is no cap at all
+         at 560. So the cap is a share of the window and moves with it: 0.62 leaves the content
+         213px at 560 and 243 at 640, and stops binding entirely past about 690px, where the region
+         fits unaided and this scroller never appears.
+
+         AllowAutoHide is off for the same reason it is off on the target list: Fluent OVERLAYS a
+         scrollbar that can hide, and here it would land on the Browse buttons down the right edge. -->
+    <ScrollViewer DockPanel.Dock="Top" VerticalScrollBarVisibility="Auto"
+                  HorizontalScrollBarVisibility="Disabled" AllowAutoHide="False"
+                  MaxHeight="{Binding $parent[Window].Bounds.Height,
+                              Converter={x:Static local:Ratio.Of}, ConverterParameter=0.62}">
+    <StackPanel Spacing="6" IsEnabled="{Binding !IsShuttingDown}">
+      <!-- 128, and the same 128 in all five label grids below, which is what keeps the labels in
+           one column down the window. Measured under Skia rather than chosen: the longest label,
+           "Catalog (in use):", wants 109px in the bundled Inter, and the 110 this used to be left it
+           one pixel from clipping into the value beside it — a Grid does not clip its children, so
+           it would have overlapped rather than truncated. Headless cannot check this: it stubs the
+           text shaper and measures every glyph to the same width, so a width assertion there says
+           nothing about the real face. WindowLabelColumnTests guards the agreement instead. -->
+      <Grid ColumnDefinitions="128,*,Auto" ColumnSpacing="8">
+        <TextBlock Grid.Column="0" Text="Game folder:" VerticalAlignment="Center" />
+        <TextBlock Grid.Column="1" Text="{Binding GameDirectory}" VerticalAlignment="Center"
+                   TextTrimming="CharacterEllipsis" />
+        <Button Grid.Column="2" Content="Browse" Command="{Binding BrowseGameCommand}" />
+      </Grid>
+
+      <Grid ColumnDefinitions="128,*,Auto" RowDefinitions="Auto,Auto" ColumnSpacing="8" RowSpacing="2">
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="Catalog:" VerticalAlignment="Center" />
+        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding CatalogInput}"
+                 PlaceholderText="A catalog.json path, or an https:// URL" />
+        <StackPanel Grid.Row="0" Grid.Column="2" Orientation="Horizontal" Spacing="8">
+          <Button Content="Load" Command="{Binding ApplyCatalogSourceCommand}" />
+          <Button Content="Browse" Command="{Binding ChangeCatalogCommand}" />
+          <Button Content="Use cached copy" Command="{Binding UseCachedCatalogCommand}" />
+        </StackPanel>
+        <!-- The source actually in use, which differs from the box above whenever the box holds
+             an edit the user has not pressed Load on yet. Labelled, because unlabelled it is a
+             grey path under a text box that holds a different path, and a reader has no way to
+             tell which of the two the application is reading. Both halves hide together: with
+             nothing loaded the description is empty, and a lone "In use:" beside nothing at all
+             says less than a row that is not there. -->
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="Catalog (in use):" Classes="secondary"
+                   IsVisible="{Binding CatalogDescription,
+                               Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+        <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding CatalogDescription}" Classes="secondary"
+                   TextTrimming="CharacterEllipsis"
+                   IsVisible="{Binding CatalogDescription,
+                               Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+      </Grid>
+
+      <Expander x:Name="AdvancedSection" Header="Advanced">
+        <StackPanel Spacing="6">
+          <Grid ColumnDefinitions="128,*,Auto" ColumnSpacing="8">
+            <TextBlock Grid.Column="0" Text="Downloads:" VerticalAlignment="Center" />
+            <TextBlock Grid.Column="1" Text="{Binding DownloadDirectory}" VerticalAlignment="Center"
+                       TextTrimming="CharacterEllipsis" />
+            <Button Grid.Column="2" Content="Browse" Command="{Binding BrowseDownloadsCommand}" />
+          </Grid>
+          <Grid ColumnDefinitions="128,Auto,Auto" ColumnSpacing="8">
+            <TextBlock Grid.Column="0" Text="Connections:" VerticalAlignment="Center" />
+            <Slider Grid.Column="1" Minimum="1" Maximum="16" Width="220"
+                    Value="{Binding Connections}" />
+            <TextBlock Grid.Column="2" Text="{Binding Connections}" VerticalAlignment="Center" />
+          </Grid>
+          <Grid ColumnDefinitions="128,*,Auto" ColumnSpacing="8">
+            <TextBlock Grid.Column="0" Text="Wine prefix:" VerticalAlignment="Center" />
+            <TextBlock Grid.Column="1" Text="{Binding WinePrefix}" VerticalAlignment="Center"
+                       TextTrimming="CharacterEllipsis" />
+            <Button Grid.Column="2" Content="Browse" Command="{Binding BrowseWinePrefixCommand}" />
+          </Grid>
+        </StackPanel>
+      </Expander>
+
+      <!-- Hidden only when no backend reports support: the EA-client backend reports for
+           Windows and the Wine backend for Linux, so this shows on either. On any other
+           platform, including macOS, neither backend reports supported and this stays hidden
+           rather than offering a control that cannot work.
+           The nested DataContext is why the binding sweep has to re-root; without that, every
+           binding below would read as unresolved. -->
+      <Expander x:Name="UnlockerSection" Header="DLC Unlocker" DataContext="{Binding Unlocker}"
+                IsVisible="{Binding IsSupported}">
+        <StackPanel Spacing="6">
+          <Grid ColumnDefinitions="Auto,Auto,*" ColumnSpacing="8">
+            <Button Grid.Column="0" Content="Select all"
+                    Command="{Binding SelectAllCommand}" />
+            <Button Grid.Column="1" Content="Select none"
+                    Command="{Binding SelectNoneCommand}" />
+            <Button Grid.Column="2" HorizontalAlignment="Right" Content="Refresh"
+                    Command="{Binding RefreshCommand}" />
+          </Grid>
+          <!-- OUTSIDE the scroller below, deliberately. These are the only three things detection
+               reports that ask something of the user, and inside the target list's scroller they
+               scrolled out of sight behind eight rows nobody had to read.
+
+               The scroll lives HERE, inside the section that grows, and not around the settings
+               region as a whole: wrapped outside, unfolding a section made the game folder, the
+               catalog box and the Scan row scroll away with it, which is worse than the overflow it
+               was fixing. The target list is the only part of this section whose height is not
+               fixed — one row per client per prefix, and a machine with several launchers has
+               plenty. Select all / Refresh sit above this and Install / Remove below it, outside the
+               scroller, so the controls are reachable whatever the list does.
+
+               140 is measured, not picked: it is four target rows, and it fixes the section's height
+               so eight targets and fifteen arrange identically. Three targets — the reported case —
+               sit under the cap, so nothing scrolls and the pack list keeps 149px. Past the cap the
+               pack list holds 71px at the 640px default and 331px at 900. Raising the cap buys
+               target rows straight out of the pack list: at 180 the list was 31px, which reads as
+               broken.
+
+               AllowAutoHide is off because Fluent's scrollbar OVERLAYS the content when it can hide,
+               and it landed on top of the status column: "Not install" with the bar over the rest.
+               Off, it reserves its own width. HorizontalScrollBarVisibility is off explicitly too:
+               enabled, it measures the content with infinite width and the TextTrimming on every
+               path below stops firing. -->
+          <ScrollViewer MaxHeight="140" VerticalScrollBarVisibility="Auto"
+                        HorizontalScrollBarVisibility="Disabled" AllowAutoHide="False">
+          <ItemsControl ItemsSource="{Binding Targets}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate>
+                <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="8">
+                  <CheckBox Grid.Column="0" IsChecked="{Binding IsSelected}"
+                            IsEnabled="{Binding !IsBusy}" VerticalAlignment="Center" />
+                  <StackPanel Grid.Column="1">
+                    <!-- Title, not DisplayName: one flat property so the binding sweep can
+                         resolve it, and it is where the environment appears off Windows. -->
+                    <TextBlock Text="{Binding Title}" TextTrimming="CharacterEllipsis" />
+                    <TextBlock Text="{Binding ClientPath}" Classes="secondary"
+                               TextTrimming="CharacterEllipsis" />
+                    <!-- Per row rather than a banner: banners key by id, so a batch's warnings
+                         would collapse to whichever target reported last. -->
+                    <TextBlock Text="{Binding Warning}" Classes="secondary" TextWrapping="Wrap"
+                               IsVisible="{Binding Warning, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                  </StackPanel>
+                  <!-- Wrapped, not trimmed: a failed operation puts its error message here, and
+                       those interpolate paths and exception messages. There is no banner left to
+                       carry them and no tooltip anywhere in this window, so trimming to the 220
+                       cap would show the user "Instal…" and nothing else. The pack list wraps its
+                       own status for the same reason. -->
+                  <TextBlock Grid.Column="2" Text="{Binding StatusText}" MaxWidth="220"
+                             TextWrapping="Wrap" VerticalAlignment="Center" />
+                </Grid>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+          </ScrollViewer>
+          <!-- The three things detection can report that ask something of the user: a prefix they
+               named in the setting that is not one, a Flatpak sandbox that cannot see the host, and
+               finding nothing at all. Every other diagnostic — a prefix with no client registered, a
+               32-bit prefix, an unreadable launcher config — goes to the log, because one line per
+               prefix examined is a list nobody reads and it used to bury the buttons below.
+               The `secondary` class already exists and is styled; a new class here would fail
+               ThemeSweepTests in both directions. -->
+          <ItemsControl ItemsSource="{Binding DetectionNotes}"
+                        IsVisible="{Binding HasDetectionNotes}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate>
+                <TextBlock Text="{Binding}" Classes="secondary" TextWrapping="Wrap" />
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+          <Grid ColumnDefinitions="Auto,Auto,*" ColumnSpacing="8">
+            <Button Grid.Column="0" Content="Install selected"
+                    Command="{Binding InstallSelectedCommand}" />
+            <Button Grid.Column="1" Content="Remove selected"
+                    Command="{Binding RemoveSelectedCommand}" />
+          </Grid>
+          <Grid ColumnDefinitions="Auto,*,Auto,Auto,Auto,Auto" ColumnSpacing="8"
+                IsVisible="{Binding IsBusy}">
+            <TextBlock Grid.Column="0" Text="{Binding BatchPosition}" Classes="secondary"
+                       VerticalAlignment="Center" />
+            <TextBlock Grid.Column="1" Text="{Binding CurrentStep}" VerticalAlignment="Center" />
+            <!-- Total is bound, not just Completed: the step count each operation publishes is
+                 only visible to a user if the bar knows where the end is. -->
+            <ProgressBar Grid.Column="2" Width="120" Minimum="0"
+                         Maximum="{Binding Total}" Value="{Binding Completed}"
+                         VerticalAlignment="Center" />
+            <!-- The denominator, not just the numerator: Total already reaches the bar's fill,
+                 but without this the text beside it shows "7" where the design shows "7/10". -->
+            <TextBlock Grid.Column="3" VerticalAlignment="Center" Text="{Binding Completed}" />
+            <TextBlock Grid.Column="4" VerticalAlignment="Center" Text="/" />
+            <TextBlock Grid.Column="5" VerticalAlignment="Center" Text="{Binding Total}" />
+          </Grid>
+          <Button Content="Restart as administrator"
+                  Command="{Binding RelaunchElevatedCommand}"
+                  IsVisible="{Binding RequiresElevation}" />
+        </StackPanel>
+      </Expander>
+
+      <!-- Bounded for the same reason the target list is, and in the same shape: the thing that
+           grows carries its own scroll, rather than the settings region scrolling as a whole and
+           taking the game folder and the catalog box out of reach with it. A run of banners is
+           rarer than a long target list but no more bounded — one per failure, each dismissible. -->
+      <ScrollViewer MaxHeight="120" VerticalScrollBarVisibility="Auto"
+                    HorizontalScrollBarVisibility="Disabled">
+      <ItemsControl ItemsSource="{Binding Banners}">
+        <ItemsControl.ItemTemplate>
+          <DataTemplate>
+            <Border Classes="banner"
+                    Classes.warning="{Binding IsWarning}"
+                    Classes.error="{Binding IsError}">
+              <!-- Two columns rather than a horizontal StackPanel. A StackPanel measures
+                   horizontally with infinite available width, so Stretch is inert and Wrap never
+                   fires: the text lays out on one unbroken line and Dismiss (the only route to
+                   clear a banner) is arranged off the window, with no horizontal scroll to
+                   reach it. Banner text interpolates paths and exception messages. -->
+              <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                <TextBlock Grid.Column="0" Text="{Binding Text}" TextWrapping="Wrap"
+                           VerticalAlignment="Center" />
+                <Button Grid.Column="1" Content="Dismiss"
+                        Command="{Binding $parent[ItemsControl].DataContext.DismissBannerCommand}"
+                        CommandParameter="{Binding}" />
+              </Grid>
+            </Border>
+          </DataTemplate>
+        </ItemsControl.ItemTemplate>
+      </ItemsControl>
+      </ScrollViewer>
+
+      <Grid ColumnDefinitions="Auto,Auto,Auto,*,Auto" ColumnSpacing="8">
+        <Button Grid.Column="0" Content="Select all" Command="{Binding SelectAllCommand}" />
+        <Button Grid.Column="1" Content="None" Command="{Binding SelectNoneCommand}" />
+        <TextBlock Grid.Column="2" Text="Search:" VerticalAlignment="Center" />
+        <TextBox Grid.Column="3" MinWidth="160" Text="{Binding SearchText}" />
+        <Button Grid.Column="4" Content="Scan" Command="{Binding ScanCommand}" />
+      </Grid>
+    </StackPanel>
+    </ScrollViewer>
+
+    <Grid DockPanel.Dock="Bottom" ColumnDefinitions="*,Auto,Auto,Auto,Auto" ColumnSpacing="8" Margin="0,8,0,0"
+          IsEnabled="{Binding !IsShuttingDown}">
+      <TextBlock Grid.Column="0" Text="{Binding StatusText}" VerticalAlignment="Center" />
+      <Button Grid.Column="1" Content="Pause" Command="{Binding PauseCommand}" />
+      <Button Grid.Column="2" Content="Resume" Command="{Binding ResumeCommand}" />
+      <Button Grid.Column="3" Content="Cancel all" Command="{Binding CancelAllCommand}" />
+      <Button Grid.Column="4" Content="Add selected" Command="{Binding AddSelectedCommand}" />
+    </Grid>
+
+    <!-- The stopping state: the content stays visible and goes inert rather than being
+         replaced, because shutdown waits for the runner and can take minutes on a large extract.
+         A window that emptied itself would look like a crash. -->
+    <TextBlock DockPanel.Dock="Bottom" Margin="0,8,0,0"
+               Text="Finishing up — waiting for the current pack to stop…"
+               IsVisible="{Binding IsShuttingDown}" />
+
+    <Grid ColumnDefinitions="*,8,2*" IsEnabled="{Binding !IsShuttingDown}">
+      <Panel Grid.Column="0">
+      <ListBox ItemsSource="{Binding FilteredRows}">
+        <ListBox.ItemTemplate>
+          <DataTemplate>
+            <StackPanel Spacing="2">
+              <!-- On the TEMPLATE ROOT, not on the ListBox. Compiled bindings are off in this
+                   project, so a ContextMenu attached to the ListBox binds against the inherited
+                   MainViewModel, where none of these three commands exist. It resolves to null
+                   at runtime with no build error and no exception, and every item is dead. Inside
+                   the template it inherits the row's DataContext. -->
+              <StackPanel.ContextMenu>
+                <ContextMenu>
+                  <MenuItem Header="Cancel" Command="{Binding CancelCommand}" />
+                  <MenuItem Header="Remove" Command="{Binding RemoveCommand}" />
+                  <!-- An Installed row's checkbox is disabled, and this is the only way
+                       to re-check it. -->
+                  <MenuItem Header="Reinstall anyway" Command="{Binding ReinstallCommand}" />
+                </ContextMenu>
+              </StackPanel.ContextMenu>
+              <!-- Two lines rather than one. Everything on a single line needs the width of a
+                   code, a name, a status, a size and a bar side by side, and that width is what
+                   the list column has to be given; stacked, the column narrows to the longest
+                   pack name and the log gets the rest of the window. -->
+              <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto">
+                <!-- Negative vertical margin, deliberately. Fluent's CheckBox template pins the
+                     grid holding the box to Height="32" — a literal, not a resource — around a box
+                     that is 20 and centred, so every row carried 12px of dead height it could not
+                     be styled out of. -6 top and bottom gives that 12 back and leaves the box
+                     where it already was. -->
+                <CheckBox Grid.Row="0" Grid.Column="0" Margin="0,-6,8,-6"
+                          IsChecked="{Binding IsChecked}" IsEnabled="{Binding IsCheckable}" />
+                <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Name}" Margin="0,0,8,0"
+                           VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
+                <TextBlock Grid.Row="0" Grid.Column="2" Classes="secondary" Text="{Binding SizeText}"
+                           MinWidth="72"
+                           HorizontalAlignment="Right" VerticalAlignment="Center" />
+                <!-- A Grid, not a horizontal StackPanel: a StackPanel measures with infinite
+                     available width, so the status would never wrap and a Blocked row's error
+                     text would lay out past the edge of the column. -->
+                <Grid Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"
+                      ColumnDefinitions="Auto,*" ColumnSpacing="8">
+                  <TextBlock Grid.Column="0" Classes="secondary" Text="{Binding Code}"
+                             MinWidth="48" />
+                  <TextBlock Grid.Column="1" Classes="secondary" Text="{Binding StatusText}"
+                             TextWrapping="Wrap"
+                             Classes.status-ok="{Binding IsStatusOk}"
+                             Classes.status-busy="{Binding IsStatusBusy}"
+                             Classes.status-warning="{Binding IsStatusWarning}"
+                             Classes.status-error="{Binding IsStatusError}" />
+                </Grid>
+              </Grid>
+              <TextBlock Text="{Binding Message}" Margin="28,0,0,0" TextWrapping="Wrap"
+                         Classes.warning="{Binding IsWarning}"
+                         Classes.error="{Binding IsError}"
+                         IsVisible="{Binding Message,
+                                     Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+              <TextBlock Text="{Binding CurrentEntry}" Margin="28,0,0,0" Classes="secondary"
+                         TextTrimming="CharacterEllipsis"
+                         IsVisible="{Binding CurrentEntry,
+                                     Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+              <!-- A rule along the bottom of the row rather than a 120px bar beside the status.
+                   The bar was the widest fixed thing in the row and the percentage it showed is
+                   already spelled out in StatusText. -->
+              <ProgressBar Height="2" MinHeight="0" Minimum="0" Maximum="100"
+                           Value="{Binding ProgressPercent}"
+                           IsVisible="{Binding IsProgressVisible}" />
+            </StackPanel>
+          </DataTemplate>
+        </ListBox.ItemTemplate>
+      </ListBox>
+
+      <!-- LAST child, deliberately. A Panel draws in document order and the ListBox carries an
+           opaque MantleBrush background, so a label declared before the list is painted and then
+           covered. Nothing binds the list's IsVisible, so this overlays rather than hides. -->
+      <TextBlock x:Name="EmptyState"
+                 Text="{Binding EmptyStateMessage}"
+                 HorizontalAlignment="Center" VerticalAlignment="Center"
+                 IsVisible="{Binding EmptyStateMessage,
+                             Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+      </Panel>
+
+      <Border Grid.Column="2" Classes="log" DataContext="{Binding Log}">
+        <DockPanel>
+          <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Right"
+                      Spacing="6" Margin="0,6,0,0">
+            <Button Content="Copy" Command="{Binding CopyCommand}" />
+            <Button Content="Clear" Command="{Binding ClearCommand}" />
+          </StackPanel>
+          <ScrollViewer Name="LogScroll" VerticalScrollBarVisibility="Auto">
+            <ItemsControl ItemsSource="{Binding Lines}">
+              <!-- Without this the default panel is a non-virtualizing StackPanel, which
+                   realizes every one of the up-to-2000 capped lines as live controls, and every
+                   trim at the cap removes index 0 and re-arranges every remaining child — the
+                   only O(n)-per-line cost in the whole logging chain. -->
+              <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                  <VirtualizingStackPanel />
+                </ItemsPanelTemplate>
+              </ItemsControl.ItemsPanel>
+              <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                  <!-- The MESSAGE is selectable; the time and the code are not. Selection is per
+                       control, so no drag can span two of these columns anyway, and a
+                       SelectableTextBlock is not free: measured under Skia over 40 lines, all three
+                       columns selectable cost 27.3ms a frame against 15.4ms for plain TextBlocks,
+                       while the message alone costs 21.4ms. The message is where the URLs and the
+                       error text are; the other two are what the Copy button is for.
+
+                       Cross-line selection is not on offer either way — one joined string in a
+                       read-only TextBox would buy it at the cost of the per-line severity colour
+                       and of virtualization over the 2000-line cap.
+
+                       The styles this carries are written ":is(TextBlock)" in Controls.axaml. A
+                       bare "TextBlock" selector is an EXACT type match in Avalonia and reaches no
+                       SelectableTextBlock, silently: the classes stay in the markup, so the sweeps
+                       that check class coverage stay satisfied while the line loses its family, its
+                       size and its colour. -->
+                  <Grid ColumnDefinitions="Auto,Auto,*" ColumnSpacing="6">
+                    <TextBlock Grid.Column="0" Classes="log-line secondary" Text="{Binding Time}" />
+                    <TextBlock Grid.Column="1" Classes="log-line secondary" Text="{Binding Code}" />
+                    <SelectableTextBlock Grid.Column="2" Classes="log-line" Text="{Binding Text}"
+                                         Classes.log-warning="{Binding IsWarning}"
+                                         Classes.log-error="{Binding IsError}"
+                                         TextWrapping="Wrap" />
+                  </Grid>
+                </DataTemplate>
+              </ItemsControl.ItemTemplate>
+            </ItemsControl>
+          </ScrollViewer>
+        </DockPanel>
+      </Border>
+    </Grid>
+
+  </DockPanel>
+</Window>

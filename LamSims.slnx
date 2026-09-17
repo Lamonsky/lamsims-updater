@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="LamSims.App.Tests/LamSims.App.Tests.csproj" />
+  <Project Path="LamSims.App.ViewTests/LamSims.App.ViewTests.csproj" />
+  <Project Path="LamSims.App/LamSims.App.csproj" />
+  <Project Path="LamSims.Core.Tests/LamSims.Core.Tests.csproj" />
+  <Project Path="LamSims.Core/LamSims.Core.csproj" />
+</Solution>

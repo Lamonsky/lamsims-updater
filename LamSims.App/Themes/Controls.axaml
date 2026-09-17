@@ -1,0 +1,141 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <!-- DynamicResource throughout: this file is merged into Application.Styles while the palette
+       is merged into Application.Resources, and dynamic resolution is what lets a future flavour
+       be a swapped dictionary rather than a rewrite. -->
+
+  <Style Selector="Window">
+    <Setter Property="Background" Value="{DynamicResource BaseBrush}"/>
+    <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
+    <Setter Property="FontFamily" Value="fonts:Inter#Inter"/>
+  </Style>
+
+  <Style Selector="TextBlock.secondary">
+    <Setter Property="Foreground" Value="{DynamicResource Subtext0Brush}"/>
+  </Style>
+
+  <!-- Fluent gives every CheckBox a 32px minimum height and 8px of trailing padding for content
+       this application never puts in one: each checkbox here is a bare box with its label in the
+       next grid column. Both are dead space, and the 32px floor is what set the height of a pack
+       row's first line. -->
+  <Style Selector="CheckBox">
+    <Setter Property="MinHeight" Value="0"/>
+    <Setter Property="Padding" Value="0"/>
+  </Style>
+
+  <!-- Fluent leaves an Expander's HorizontalAlignment at Left, so it sizes to content in BOTH
+       states: measured, Advanced was 145px closed and 389px open inside an 876px column. Nothing
+       in MainWindow.axaml set that, which is why it reads as though no width was chosen at all. -->
+  <Style Selector="Expander">
+    <Setter Property="HorizontalAlignment" Value="Stretch"/>
+  </Style>
+
+  <Style Selector="Border.log">
+    <Setter Property="Background" Value="{DynamicResource MantleBrush}"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource Surface2Brush}"/>
+    <Setter Property="BorderThickness" Value="1"/>
+    <Setter Property="CornerRadius" Value="8"/>
+    <Setter Property="Padding" Value="10"/>
+  </Style>
+
+  <!-- ":is(TextBlock)", not "TextBlock", here and on the two severity styles: Avalonia's bare type
+       selector is an EXACT match, and the log's message column is a SelectableTextBlock. It fails
+       silently both ways — the class stays applied, so the coverage sweeps stay green while the
+       line renders in the inherited face. Only the three selectors a SelectableTextBlock carries
+       are widened; .secondary is on plain TextBlocks.
+
+       Real family names, never the alias "monospace": the platform font manager does not know
+       fontconfig's aliases, so it matched nothing, fell through to proportional Noto Sans, and
+       cost 363ms a frame against 24ms for a name that resolves. First match wins. -->
+  <Style Selector=":is(TextBlock).log-line">
+    <Setter Property="FontFamily" Value="Cascadia Mono, Consolas, DejaVu Sans Mono, Liberation Mono, Noto Sans Mono, Menlo"/>
+    <Setter Property="FontSize" Value="12"/>
+  </Style>
+
+  <Style Selector=":is(TextBlock).log-warning">
+    <Setter Property="Foreground" Value="{DynamicResource YellowBrush}"/>
+  </Style>
+
+  <Style Selector=":is(TextBlock).log-error">
+    <Setter Property="Foreground" Value="{DynamicResource RedBrush}"/>
+  </Style>
+
+  <!-- Declared after TextBlock.secondary and relying on it: the status text carries `secondary`
+       as its resting colour and one of these four when it earns one. Both selectors are the same
+       specificity, so the later declaration is what wins; moving these above `secondary` would
+       leave every status grey. -->
+  <Style Selector="TextBlock.status-ok">
+    <Setter Property="Foreground" Value="{DynamicResource GreenBrush}"/>
+  </Style>
+
+  <Style Selector="TextBlock.status-busy">
+    <Setter Property="Foreground" Value="{DynamicResource BlueBrush}"/>
+  </Style>
+
+  <Style Selector="TextBlock.status-warning">
+    <Setter Property="Foreground" Value="{DynamicResource YellowBrush}"/>
+  </Style>
+
+  <Style Selector="TextBlock.status-error">
+    <Setter Property="Foreground" Value="{DynamicResource RedBrush}"/>
+  </Style>
+
+  <Style Selector="TextBlock.warning">
+    <Setter Property="Foreground" Value="{DynamicResource YellowBrush}"/>
+  </Style>
+
+  <Style Selector="TextBlock.error">
+    <Setter Property="Foreground" Value="{DynamicResource RedBrush}"/>
+  </Style>
+
+  <Style Selector="Border.banner">
+    <Setter Property="BorderThickness" Value="1"/>
+    <Setter Property="CornerRadius" Value="6"/>
+    <Setter Property="Padding" Value="6"/>
+    <Setter Property="Margin" Value="0,2"/>
+    <Setter Property="Background" Value="{DynamicResource Surface0Brush}"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource BlueBrush}"/>
+  </Style>
+
+  <Style Selector="Border.banner.warning">
+    <Setter Property="BorderBrush" Value="{DynamicResource YellowBrush}"/>
+  </Style>
+
+  <Style Selector="Border.banner.error">
+    <Setter Property="BorderBrush" Value="{DynamicResource RedBrush}"/>
+  </Style>
+
+  <Style Selector="ListBox">
+    <Setter Property="Background" Value="{DynamicResource MantleBrush}"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource Surface2Brush}"/>
+    <Setter Property="BorderThickness" Value="1"/>
+  </Style>
+
+  <Style Selector="ListBoxItem">
+    <Setter Property="Background" Value="Transparent"/>
+  </Style>
+
+  <!-- /template/, not the item. Fluent paints its state backgrounds onto PART_ContentPresenter
+       through pseudo-class styles that outrank the TemplateBinding carrying the item's own
+       Background down, so setting it on ListBoxItem:selected sets a property nothing reads — the
+       item reported Surface1 while the presenter painted #0078d7. The unselected style above has
+       no competing trigger and stays. -->
+  <Style Selector="ListBoxItem:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource Surface0Brush}"/>
+  </Style>
+
+  <Style Selector="ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource Surface1Brush}"/>
+  </Style>
+
+  <Style Selector="ProgressBar">
+    <Setter Property="Foreground" Value="{DynamicResource MauveBrush}"/>
+    <Setter Property="Background" Value="{DynamicResource Surface0Brush}"/>
+  </Style>
+
+  <Style Selector="Button:disabled">
+    <Setter Property="Opacity" Value="0.5"/>
+  </Style>
+
+</Styles>

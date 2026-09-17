@@ -1,0 +1,91 @@
+name: CI
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+  workflow_call:
+
+# A superseded run has nothing left to prove.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build-test:
+    strategy:
+      # Three legs that have never run together. Cancelling the others on the first failure
+      # would show one failure per triage round instead of all of them.
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    # Exactly one run per commit. A same-repo PR branch fires `push` as well as `pull_request`, and
+    # those two events carry different github.ref values, so cancel-in-progress cannot collapse them.
+    # Same-repo work is covered by the push event; the pull_request event is kept for forks, whose
+    # pushes never reach this repository at all.
+    if: >-
+      github.event_name != 'pull_request' ||
+      github.event.pull_request.head.repo.full_name != github.repository
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-dotnet@v6
+        with:
+          global-json-file: global.json
+
+      - run: dotnet restore LamSims.slnx
+
+      # -warnaserror is the real gate: CA1416 platform-compatibility violations do not surface
+      # through `dotnet test`.
+      - run: dotnet build LamSims.slnx -warnaserror --no-restore
+
+      - run: dotnet test LamSims.slnx --no-build --no-restore
+
+      - uses: actions/upload-artifact@v7
+        if: failure()
+        with:
+          name: test-logs-${{ matrix.os }}
+          path: '**/TestResults/**'
+          if-no-files-found: ignore
+
+  # Packaging is otherwise exercised only by release.yml on a tag push, which means a break is
+  # found at release time by the person least able to debug it. This runs the same publish and the
+  # same manifest guard release.yml runs, on every push.
+  publish-smoke:
+    if: >-
+      github.event_name != 'pull_request' ||
+      github.event.pull_request.head.repo.full_name != github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-dotnet@v6
+        with:
+          global-json-file: global.json
+
+      - run: dotnet publish LamSims.App/LamSims.App.csproj -r win-x64 -c Release -o out/win-x64
+
+      # One file, not a directory of loose native libraries: without
+      # IncludeNativeLibrariesForSelfExtract the app ships without a renderer.
+      - name: The win-x64 publish is a single file
+        run: |
+          if ls out/win-x64/*.dll >/dev/null 2>&1; then
+            echo "::error::publish left loose .dll files beside the exe"
+            ls -la out/win-x64/
+            exit 1
+          fi
+
+      # The same guard release.yml applies, run on every push rather than only at a tag.
+      - name: The shipped exe requests asInvoker and not administrator
+        run: |
+          grep -aq 'requestedExecutionLevel level="asInvoker"' out/win-x64/LamSims.App.exe
+          if grep -aq 'requestedExecutionLevel level="requireAdministrator"' out/win-x64/LamSims.App.exe; then
+            echo "::error::the published exe requests requireAdministrator"
+            exit 1
+          fi
+
+      - run: dotnet publish LamSims.App/LamSims.App.csproj -r linux-x64 -c Release -o out/linux-x64

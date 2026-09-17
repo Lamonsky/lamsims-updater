@@ -1,6 +1,0 @@
-<Solution>
-  <Folder Name="/Elementy rozwiązania/">
-    <File Path="README.md" />
-  </Folder>
-  <Project Path="sims4-updater/sims4-updater.csproj" />
-</Solution>

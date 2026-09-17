@@ -61,3 +61,10 @@
 #*.PDF   diff=astextplain
 #*.rtf   diff=astextplain
 #*.RTF   diff=astextplain
+
+###############################################################################
+# The embedded unlocker resources are written into the user's client install and
+# are asserted byte-for-byte against upstream. Line-ending normalisation changes
+# those bytes on a Windows checkout, so they are never treated as text.
+###############################################################################
+LamSims.Core/Unlocking/Resources/** -text

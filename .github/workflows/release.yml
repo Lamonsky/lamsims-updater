@@ -1,0 +1,97 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write        # only this workflow needs it; ci.yml stays read-only
+
+jobs:
+  # The real matrix, not a copy of it. No green three-OS run, no release.
+  verify:
+    uses: ./.github/workflows/ci.yml
+
+  # The uid-0 leg, which ci.yml does not contain: it is what catches a test that arranges a
+  # refusal with a Unix file mode and forgets to say so. That test passes vacuously everywhere
+  # else, so without this job a release can ship one.
+  verify-root:
+    uses: ./.github/workflows/root-check.yml
+
+  release:
+    needs: [verify, verify-root]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-dotnet@v6
+        with:
+          global-json-file: global.json
+
+      # Guard 1. A self-updater compares a release tag against the assembly version inside the
+      # binary, so a tag that disagrees would ship a build offering its own users a perpetual
+      # update to the version they already run. This makes that state unreleasable, and also
+      # catches a forgotten Version.props bump.
+      - name: Tag matches the shipped version
+        run: |
+          TAG="${GITHUB_REF_NAME#v}"
+          VER="$(dotnet msbuild LamSims.App/LamSims.App.csproj -getProperty:Version)"
+          echo "tag=$TAG version=$VER"
+          if [ "$TAG" != "$VER" ]; then
+            echo "::error::tag $TAG does not match Version $VER in Version.props"
+            exit 1
+          fi
+
+      # Cross-published from ubuntu for all four. Measured: the win-x64 apphost carries its
+      # Win32 manifest correctly when built from Linux, so a native Windows publish adds
+      # nothing. Publish flags live in the csproj so this stays reproducible locally.
+      - name: Publish
+        run: |
+          for rid in win-x64 linux-x64 osx-arm64 osx-x64; do
+            dotnet publish LamSims.App/LamSims.App.csproj -r "$rid" -c Release -o "out/$rid"
+          done
+
+      # Guard 2, checked on the artifact rather than on app.manifest: asserting a file against
+      # itself would prove nothing. Both directions, because the failure mode this exists for
+      # is upstream's requireAdministrator manifest being copied in. Steps run under `bash -e`,
+      # so the bare grep failing is itself the failure.
+      - name: The shipped exe requests asInvoker and not administrator
+        run: |
+          grep -aq 'requestedExecutionLevel level="asInvoker"' out/win-x64/LamSims.App.exe
+          if grep -aq 'requestedExecutionLevel level="requireAdministrator"' out/win-x64/LamSims.App.exe; then
+            echo "::error::the published exe requests requireAdministrator"
+            exit 1
+          fi
+
+      # Named files, never the directory: two native pdbs totalling ~105 MB ship inside the
+      # SkiaSharp and HarfBuzzSharp packages and no MSBuild property removes them.
+      - name: Name the assets
+        run: |
+          mkdir -p assets
+          cp out/win-x64/LamSims.App.exe assets/lamsims-updater-win-x64.exe
+          cp out/linux-x64/LamSims.App  assets/lamsims-updater-linux-x64
+          cp out/osx-arm64/LamSims.App  assets/lamsims-updater-osx-arm64
+          cp out/osx-x64/LamSims.App    assets/lamsims-updater-osx-x64
+          cd assets && sha256sum lamsims-updater-* > SHA256SUMS && cat SHA256SUMS
+
+      # A draft: the tag lives in a repository this is contributed to, so whoever tags may not
+      # be whoever set the version, so a self-updater has to decide how it treats drafts.
+      - name: Draft the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # Idempotent: gh creates the release object before it finishes uploading assets, so a
+          # transient failure partway through would otherwise leave a partial draft that makes every
+          # retry fail with "release already exists". Creating only when absent, then uploading with
+          # --clobber, means re-pushing the tag finishes the job rather than blocking it.
+          if ! gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
+            gh release create "$GITHUB_REF_NAME" \
+              --draft --generate-notes --title "$GITHUB_REF_NAME"
+          fi
+
+          gh release upload "$GITHUB_REF_NAME" --clobber \
+            assets/lamsims-updater-win-x64.exe \
+            assets/lamsims-updater-linux-x64 \
+            assets/lamsims-updater-osx-arm64 \
+            assets/lamsims-updater-osx-x64 \
+            assets/SHA256SUMS

@@ -1,0 +1,40 @@
+name: Root check
+
+# Its own workflow, deliberately. It ran red on purpose while it was answering its original
+# question — which permission-denied tests pass for the wrong reason when the suite runs as uid 0 —
+# and release.yml gates on ci.yml as a whole and cannot select jobs inside it, so a job designed to
+# be red would have made every release unreachable.
+#
+# That question is answered: every test that arranges a failure with a Unix file mode now carries
+# PosixDenialFact (LamSims.Core.Tests/PlatformGates.cs), which reports it as skipped where the mode
+# is not enforced against this process. So the job is green, and what it now guards is the gate
+# itself: a new mode-arranging test that forgets the attribute fails here and nowhere else.
+#
+# Green means it can gate, so release.yml calls it beside ci.yml and no release ships without it.
+on:
+  push:
+    branches: ['**']
+  pull_request:
+  workflow_call:
+
+concurrency:
+  group: root-check-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  root-check:
+    # Exactly one run per commit, matching ci.yml: a same-repo PR branch fires push as well as
+    # pull_request, and those events carry different github.ref values.
+    if: >-
+      github.event_name != 'pull_request' ||
+      github.event.pull_request.head.repo.full_name != github.repository
+    runs-on: ubuntu-latest
+    container: mcr.microsoft.com/dotnet/sdk:10.0
+    steps:
+      - uses: actions/checkout@v7
+      - run: dotnet restore LamSims.slnx
+      - run: dotnet build LamSims.slnx -warnaserror --no-restore
+      - run: dotnet test LamSims.slnx --no-build --no-restore

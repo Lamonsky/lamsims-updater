@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "updatedUtc": "2026-08-14T12:00:00Z",
+  "packs": [
+    {
+      "code": "EP01",
+      "name": "The Sims 4 Get to Work",
+      "type": "expansion",
+      "size": 6871947673,
+      "installedSize": 7300000000,
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "urls": [
+        "https://host-a.example.invalid/EP01.zip",
+        "https://host-b.example.invalid/EP01.zip"
+      ],
+      "installDirs": ["EP01"]
+    },
+    {
+      "code": "GP01",
+      "name": "The Sims 4 Outdoor Retreat",
+      "type": "game",
+      "size": 1073741824,
+      "sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+      "urls": ["https://host-a.example.invalid/GP01.zip"]
+    },
+    {
+      "code": "SP01",
+      "name": "The Sims 4 Luxury Party Stuff",
+      "type": "stuff",
+      "size": 268435456,
+      "sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+      "urls": ["https://host-a.example.invalid/SP01.zip"]
+    },
+    {
+      "code": "SP30",
+      "name": "The Sims 4 Carnaval Streetwear Kit",
+      "type": "kit",
+      "size": 134217728,
+      "sha256": "3333333333333333333333333333333333333333333333333333333333333333",
+      "urls": ["https://host-a.example.invalid/SP30.zip"],
+      "installDirs": ["SP30", "SP30_Delta"]
+    }
+  ]
+}

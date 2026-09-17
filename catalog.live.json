@@ -1,0 +1,1513 @@
+{
+  "schemaVersion": 1,
+  "updatedUtc": "2026-09-17T13:00:00Z",
+  "packs": [
+    {
+      "code": "EP01",
+      "name": "The Sims 4 Get to Work",
+      "type": "expansion",
+      "size": 1694934094,
+      "sha256": "2c14dc0d379f48629bb376fb74410405980d3386b6fa2d31dedbce9ff542da3a",
+      "urls": [
+        "https://gofile.io/d/pcJSej"
+      ],
+      "installDirs": [
+        "EP01"
+      ]
+    },
+    {
+      "code": "EP02",
+      "name": "The Sims 4 Get Together",
+      "type": "expansion",
+      "size": 1717179184,
+      "sha256": "7eaf4db3884fb93261a03ef1f182817b3a3d6a11bd2d79434050d419c381e283",
+      "urls": [
+        "https://gofile.io/d/6RRxJe"
+      ],
+      "installDirs": [
+        "EP02"
+      ]
+    },
+    {
+      "code": "EP03",
+      "name": "The Sims 4 City Living",
+      "type": "expansion",
+      "size": 2635798353,
+      "sha256": "7a6cbae70aeecf7a48dfbf87154cac8a6717b3d55755c2e7e1e502d32c2b0d61",
+      "urls": [
+        "https://gofile.io/d/bs9Cd1"
+      ],
+      "installDirs": [
+        "EP03"
+      ]
+    },
+    {
+      "code": "EP04",
+      "name": "The Sims 4 Cats & Dogs",
+      "type": "expansion",
+      "size": 2013068744,
+      "sha256": "8dec10722167f6b3a749b283b356425fe2194cdec6748869d9fb86ba8ef4e1e2",
+      "urls": [
+        "https://gofile.io/d/g6P3I3"
+      ],
+      "installDirs": [
+        "EP04"
+      ]
+    },
+    {
+      "code": "EP05",
+      "name": "The Sims 4 Seasons",
+      "type": "expansion",
+      "size": 1412690473,
+      "sha256": "09ad6a21d463d342d15bf83319f36e2ec45382c3906ba7ee9f8607e0294e0115",
+      "urls": [
+        "https://gofile.io/d/ANmgtz"
+      ],
+      "installDirs": [
+        "EP05"
+      ]
+    },
+    {
+      "code": "EP06",
+      "name": "The Sims 4 Get Famous",
+      "type": "expansion",
+      "size": 2807534837,
+      "sha256": "39a9022fb040212ef0e5afcb70101bfc34fd17b20c8bbb3b11b009c56ffb3431",
+      "urls": [
+        "https://gofile.io/d/nzLOw0"
+      ],
+      "installDirs": [
+        "EP06"
+      ]
+    },
+    {
+      "code": "EP07",
+      "name": "The Sims 4 Island Living",
+      "type": "expansion",
+      "size": 1446940021,
+      "sha256": "8c4fa16d6039eb07109a47a2353b891631771c52d24dfb998e9f9ba02b5c8bd4",
+      "urls": [
+        "https://gofile.io/d/37NvGf"
+      ],
+      "installDirs": [
+        "EP07"
+      ]
+    },
+    {
+      "code": "EP08",
+      "name": "The Sims 4 Discover University",
+      "type": "expansion",
+      "size": 1618423432,
+      "sha256": "627bd36fa61de7a756aabdf7fa37581362e8609ddd1c7a38ae5de49838c42911",
+      "urls": [
+        "https://gofile.io/d/nx58OM"
+      ],
+      "installDirs": [
+        "EP08"
+      ]
+    },
+    {
+      "code": "EP09",
+      "name": "The Sims 4 Eco Lifestyle",
+      "type": "expansion",
+      "size": 1490785679,
+      "sha256": "64ab8eb3a3c2c6cf6df9358162ad35e1e8a6d30625e1725498bb78761594deb5",
+      "urls": [
+        "https://gofile.io/d/qarGcZ"
+      ],
+      "installDirs": [
+        "EP09"
+      ]
+    },
+    {
+      "code": "EP10",
+      "name": "The Sims 4 Snowy Escape",
+      "type": "expansion",
+      "size": 1605597860,
+      "sha256": "89fac599f97dbb586577cbba089f4635d2d63b13b1b0dccda60d77b345d292c5",
+      "urls": [
+        "https://gofile.io/d/s6rjEA"
+      ],
+      "installDirs": [
+        "EP10"
+      ]
+    },
+    {
+      "code": "EP11",
+      "name": "The Sims 4 Cottage Living",
+      "type": "expansion",
+      "size": 1681100841,
+      "sha256": "99bbc43054210d6859dcb8b21176d70c54912cdc0f6b2f4727d85ab4fb0ef740",
+      "urls": [
+        "https://gofile.io/d/0FCARK"
+      ],
+      "installDirs": [
+        "EP11"
+      ]
+    },
+    {
+      "code": "EP12",
+      "name": "The Sims 4 High School Years",
+      "type": "expansion",
+      "size": 1848263218,
+      "sha256": "05a5a64b942b04c85cd2ba676e70456d41328ada7fc793db9bc66a5323fe9e21",
+      "urls": [
+        "https://gofile.io/d/rOuop3"
+      ],
+      "installDirs": [
+        "EP12"
+      ]
+    },
+    {
+      "code": "EP13",
+      "name": "The Sims 4 Growing Together",
+      "type": "expansion",
+      "size": 1397798130,
+      "sha256": "25ab114f1b6aa1cb9e4026afac190c062deea24c960a2dc689e68bc558159a3e",
+      "urls": [
+        "https://gofile.io/d/hCFrmO"
+      ],
+      "installDirs": [
+        "EP13"
+      ]
+    },
+    {
+      "code": "EP14",
+      "name": "The Sims 4 Horse Ranch",
+      "type": "expansion",
+      "size": 1852411450,
+      "sha256": "124880a91d776e3df4019f4f2016ed13542854c246e2f82b242f9fc7fe880a6b",
+      "urls": [
+        "https://gofile.io/d/uPjIsR"
+      ],
+      "installDirs": [
+        "EP14"
+      ]
+    },
+    {
+      "code": "EP15",
+      "name": "The Sims 4 For Rent",
+      "type": "expansion",
+      "size": 1532830000,
+      "sha256": "adf90a3f70a1acfd89910c4b0ba7f76540a766327bdeae8561ea8206b5f17bac",
+      "urls": [
+        "https://gofile.io/d/sFvU8z"
+      ],
+      "installDirs": [
+        "EP15"
+      ]
+    },
+    {
+      "code": "EP16",
+      "name": "The Sims 4 Lovestruck",
+      "type": "expansion",
+      "size": 1725693097,
+      "sha256": "2ab5d126b038f6e7e9b0a04fba98646401552eb556d59e2ab8d0db41036a33ac",
+      "urls": [
+        "https://gofile.io/d/fiuaUa"
+      ],
+      "installDirs": [
+        "EP16"
+      ]
+    },
+    {
+      "code": "EP17",
+      "name": "The Sims 4 Life & Death",
+      "type": "expansion",
+      "size": 2123601013,
+      "sha256": "76312dea515d10d453dd55bc53097d2235c21d5ebd6fc087803f2e31aa742bc3",
+      "urls": [
+        "https://gofile.io/d/a5VDFL"
+      ],
+      "installDirs": [
+        "EP17"
+      ]
+    },
+    {
+      "code": "EP18",
+      "name": "The Sims 4 Businesses & Hobbies",
+      "type": "expansion",
+      "size": 1517186961,
+      "sha256": "986fd56be8859d3a005615c2a2cc10179cc54ebf4bcd79aa89038eaadbe44688",
+      "urls": [
+        "https://gofile.io/d/Oj8tF6"
+      ],
+      "installDirs": [
+        "EP18"
+      ]
+    },
+    {
+      "code": "EP19",
+      "name": "The Sims 4 Enchanted by Natures",
+      "type": "expansion",
+      "size": 2089214644,
+      "sha256": "39dd7f80310ad7cb2e720a4d3585fc30827ba0da244695c2f1101875887a0656",
+      "urls": [
+        "https://gofile.io/d/tnFZgG"
+      ],
+      "installDirs": [
+        "EP19"
+      ]
+    },
+    {
+      "code": "EP20",
+      "name": "The Sims 4 Adventure Awaits",
+      "type": "expansion",
+      "size": 1567144516,
+      "sha256": "e4a1d2320088e9d2acaaa851855ba32c249b458058095aaacc6376ec3107f960",
+      "urls": [
+        "https://gofile.io/d/UO3hQb"
+      ],
+      "installDirs": [
+        "EP20"
+      ]
+    },
+    {
+      "code": "EP21",
+      "name": "The Sims 4 Royalty & Legacy",
+      "type": "expansion",
+      "size": 2556732623,
+      "sha256": "b6c56b0861860a83c92a0de72ec5908738758c0ff6c5596cdaafbe1354e17faa",
+      "urls": [
+        "https://gofile.io/d/K6qNZ1"
+      ],
+      "installDirs": [
+        "EP21"
+      ]
+    },
+    {
+      "code": "FP01",
+      "name": "The Sims 4 Holiday Celebration",
+      "size": 30127617,
+      "sha256": "b90d727d09402ef99b0d32aaad735135fe448d9382f6e6d1c862f491ae911f36",
+      "urls": [
+        "https://gofile.io/d/JQ9Qxp"
+      ],
+      "installDirs": [
+        "FP01"
+      ]
+    },
+    {
+      "code": "GP01",
+      "name": "The Sims 4 Outdoor Retreat",
+      "type": "game",
+      "size": 691635844,
+      "sha256": "34a9142b0191be1dc6d333a94e6d7de9ee1f178adc8d07c240957dcc02779b65",
+      "urls": [
+        "https://gofile.io/d/8OWjiv"
+      ],
+      "installDirs": [
+        "GP01"
+      ]
+    },
+    {
+      "code": "GP02",
+      "name": "The Sims 4 Spa Day",
+      "type": "game",
+      "size": 529225311,
+      "sha256": "05e139413e969dc6a164212e3af04129228598ff5a99e55e0c09ed2c82a3b443",
+      "urls": [
+        "https://gofile.io/d/RAQgPv"
+      ],
+      "installDirs": [
+        "GP02"
+      ]
+    },
+    {
+      "code": "GP03",
+      "name": "The Sims 4 Dine Out",
+      "type": "game",
+      "size": 469419639,
+      "sha256": "3f3a6eb164db39ad1860b99b422ada5e96f5047e51b84185493b561b96a7f013",
+      "urls": [
+        "https://gofile.io/d/dw0OL0"
+      ],
+      "installDirs": [
+        "GP03"
+      ]
+    },
+    {
+      "code": "GP04",
+      "name": "The Sims 4 Vampires",
+      "type": "game",
+      "size": 711877903,
+      "sha256": "2ce1b0fb29527f75caf97fb8ae069e37a9b6a8ab5c13a99df8d396b9b4b9b902",
+      "urls": [
+        "https://gofile.io/d/85OFpy"
+      ],
+      "installDirs": [
+        "GP04"
+      ]
+    },
+    {
+      "code": "GP05",
+      "name": "The Sims 4 Parenthood",
+      "type": "game",
+      "size": 467471455,
+      "sha256": "9173bb3be44836e5f26352d9693460f95535da06cfc2962bc22b4783bb9eda66",
+      "urls": [
+        "https://gofile.io/d/wbgDPo"
+      ],
+      "installDirs": [
+        "GP05"
+      ]
+    },
+    {
+      "code": "GP06",
+      "name": "The Sims 4 Jungle Adventure",
+      "type": "game",
+      "size": 938869448,
+      "sha256": "7345d74f1b8b9e92f2592083fa435c7f4c086ea1f7853144f1ca8e6b252aba1f",
+      "urls": [
+        "https://gofile.io/d/UyuJuD"
+      ],
+      "installDirs": [
+        "GP06"
+      ]
+    },
+    {
+      "code": "GP07",
+      "name": "The Sims 4 StrangerVille",
+      "type": "game",
+      "size": 695169402,
+      "sha256": "0922b5641928c8833a000106e3b87cbe89442f1da749d88e544dce495db08c87",
+      "urls": [
+        "https://gofile.io/d/hctGvM"
+      ],
+      "installDirs": [
+        "GP07"
+      ]
+    },
+    {
+      "code": "GP08",
+      "name": "The Sims 4 Realm of Magic",
+      "type": "game",
+      "size": 920580400,
+      "sha256": "c281e35fe7da93deadae1320d8546c0cacef567fb958c734e38416faf061224e",
+      "urls": [
+        "https://gofile.io/d/ArNGoM"
+      ],
+      "installDirs": [
+        "GP08"
+      ]
+    },
+    {
+      "code": "GP09",
+      "name": "The Sims 4 Star Wars: Journey to Batuu",
+      "type": "game",
+      "size": 1453160106,
+      "sha256": "fccd3b0d0b45bb5cd0797f1454b8c0c9049e9c8714dcf3afb6709231deb79415",
+      "urls": [
+        "https://gofile.io/d/yDyCBY"
+      ],
+      "installDirs": [
+        "GP09"
+      ]
+    },
+    {
+      "code": "GP10",
+      "name": "The Sims 4 Dream Home Decorator",
+      "type": "game",
+      "size": 683220608,
+      "sha256": "9430e414f89e8791ed50c280aa87a4d6b5c0b1d05b5b07c7aff49f1977fc473c",
+      "urls": [
+        "https://gofile.io/d/g4mxt8"
+      ],
+      "installDirs": [
+        "GP10"
+      ]
+    },
+    {
+      "code": "GP11",
+      "name": "The Sims 4 My Wedding Stories",
+      "type": "game",
+      "size": 939625656,
+      "sha256": "0dbb359f46399ea5dd0a4b3b10ae93eb12658bd484b1af8deaf74ba367396d16",
+      "urls": [
+        "https://gofile.io/d/lNwopH"
+      ],
+      "installDirs": [
+        "GP11"
+      ]
+    },
+    {
+      "code": "GP12",
+      "name": "The Sims 4 Werewolves",
+      "type": "game",
+      "size": 970918976,
+      "sha256": "6cb04fad5b576d8902e9de5e4f987fe4b957a2991f166eb2e23724326d82232d",
+      "urls": [
+        "https://gofile.io/d/fMw9AI"
+      ],
+      "installDirs": [
+        "GP12"
+      ]
+    },
+    {
+      "code": "SP01",
+      "name": "The Sims 4 Luxury Party Stuff",
+      "type": "stuff",
+      "size": 118117206,
+      "sha256": "f95f281b2aa30a47c48d19f32495f56ea98690f8a6a0dcb77a1b2faa798275ed",
+      "urls": [
+        "https://gofile.io/d/j9nO5z"
+      ],
+      "installDirs": [
+        "SP01"
+      ]
+    },
+    {
+      "code": "SP02",
+      "name": "The Sims 4 Perfect Patio Stuff",
+      "type": "stuff",
+      "size": 96965846,
+      "sha256": "1a796864b8c075985f00dddf22831771d501b19b0d9384efc1711713c14a49bf",
+      "urls": [
+        "https://gofile.io/d/MPermC"
+      ],
+      "installDirs": [
+        "SP02"
+      ]
+    },
+    {
+      "code": "SP03",
+      "name": "The Sims 4 Cool Kitchen Stuff",
+      "type": "kit",
+      "size": 148392099,
+      "sha256": "cd404fdb895a0e11a183141b86d8321323998ccdf5c8d31124b4b3217fa23b94",
+      "urls": [
+        "https://gofile.io/d/OnsvLE"
+      ],
+      "installDirs": [
+        "SP03"
+      ]
+    },
+    {
+      "code": "SP04",
+      "name": "The Sims 4 Spooky Stuff",
+      "type": "stuff",
+      "size": 171502451,
+      "sha256": "c73f3d5767bb6472ebee7ef5ef1150d2553bbc849055474fdebf511c8020b799",
+      "urls": [
+        "https://gofile.io/d/9fiqRL"
+      ],
+      "installDirs": [
+        "SP04"
+      ]
+    },
+    {
+      "code": "SP05",
+      "name": "The Sims 4 Movie Hangout Stuff",
+      "type": "stuff",
+      "size": 227901235,
+      "sha256": "363350e7aa953ff36996b353bfd2c28697149a7a6bfc508bec255ff87e5b0de1",
+      "urls": [
+        "https://gofile.io/d/9686dT"
+      ],
+      "installDirs": [
+        "SP05"
+      ]
+    },
+    {
+      "code": "SP06",
+      "name": "The Sims 4 Romantic Garden Stuff",
+      "type": "stuff",
+      "size": 213064362,
+      "sha256": "07ed3a1a6c8d281abc5373add27305eba6c27ec866adeb2e1a4c4459c72d4096",
+      "urls": [
+        "https://gofile.io/d/O0xC4z"
+      ],
+      "installDirs": [
+        "SP06"
+      ]
+    },
+    {
+      "code": "SP07",
+      "name": "The Sims 4 Kids Room Stuff",
+      "type": "stuff",
+      "size": 158444364,
+      "sha256": "2fa106c2ef6fbadb71d3a390296b581bb7d79f05974a0f382f32ee88cc6f1adb",
+      "urls": [
+        "https://gofile.io/d/y7jL5y"
+      ],
+      "installDirs": [
+        "SP07"
+      ]
+    },
+    {
+      "code": "SP08",
+      "name": "The Sims 4 Backyard Stuff",
+      "type": "stuff",
+      "size": 177906527,
+      "sha256": "94865fbb788f520e9eedccfc2416579e824837a582acef6c05aee3d400821832",
+      "urls": [
+        "https://gofile.io/d/vVjsJW"
+      ],
+      "installDirs": [
+        "SP08"
+      ]
+    },
+    {
+      "code": "SP09",
+      "name": "The Sims 4 Vintage Glamour Stuff",
+      "type": "stuff",
+      "size": 171768186,
+      "sha256": "97958f6063b5027e0135b162d0d31c2e35dcd0754b124839ed3a50e3ca24476f",
+      "urls": [
+        "https://gofile.io/d/oZJrVD"
+      ],
+      "installDirs": [
+        "SP09"
+      ]
+    },
+    {
+      "code": "SP10",
+      "name": "The Sims 4 Bowling Night Stuff",
+      "type": "stuff",
+      "size": 199771418,
+      "sha256": "f6de912bd27b8d1f14502bef439cd8612565b5ab7e3017082474086d27cc1a9c",
+      "urls": [
+        "https://gofile.io/d/uTgkHd"
+      ],
+      "installDirs": [
+        "SP10"
+      ]
+    },
+    {
+      "code": "SP11",
+      "name": "The Sims 4 Fitness Stuff",
+      "type": "stuff",
+      "size": 161081561,
+      "sha256": "272e1a193b31f6bff94607a225887048e2a585a2d9dc650d53d51efab4282b7c",
+      "urls": [
+        "https://gofile.io/d/hU7O3d"
+      ],
+      "installDirs": [
+        "SP11"
+      ]
+    },
+    {
+      "code": "SP12",
+      "name": "The Sims 4 Toddler Stuff",
+      "type": "stuff",
+      "size": 161942375,
+      "sha256": "895893b38b9b54c74c0c6ed7b6dfdf8afd77e0ab6289847e8bae6557bd57571e",
+      "urls": [
+        "https://gofile.io/d/x3Jrv4"
+      ],
+      "installDirs": [
+        "SP12"
+      ]
+    },
+    {
+      "code": "SP13",
+      "name": "The Sims 4 Laundry Day Stuff",
+      "type": "stuff",
+      "size": 159163793,
+      "sha256": "5a58fc10a17ba87d8719dd80f5d965c53374d0fa7f5cd3b011b3f451368f7b68",
+      "urls": [
+        "https://gofile.io/d/ehIxjJ"
+      ],
+      "installDirs": [
+        "SP13"
+      ]
+    },
+    {
+      "code": "SP14",
+      "name": "The Sims 4 My First Pet Stuff",
+      "type": "stuff",
+      "size": 166412935,
+      "sha256": "7ed55ebef8707822127ff900d1721f5be52264cb907ac8866861c7b78576087c",
+      "urls": [
+        "https://gofile.io/d/Gyq9YK"
+      ],
+      "installDirs": [
+        "SP14"
+      ]
+    },
+    {
+      "code": "SP15",
+      "name": "The Sims 4 Moschino Stuff",
+      "type": "stuff",
+      "size": 133167952,
+      "sha256": "6e4756ff8f4b9ed74f688da641d4bf05793f36fc56ec6f29229d4542d7e749f0",
+      "urls": [
+        "https://gofile.io/d/yWzyho"
+      ],
+      "installDirs": [
+        "SP15"
+      ]
+    },
+    {
+      "code": "SP16",
+      "name": "The Sims 4 Tiny Living Stuff",
+      "type": "stuff",
+      "size": 220746375,
+      "sha256": "64f4cfd9878ac35c318a44c5d37eeb738691321bc3db1acb73aa8f7aec2ded88",
+      "urls": [
+        "https://gofile.io/d/xqhYR8"
+      ],
+      "installDirs": [
+        "SP16"
+      ]
+    },
+    {
+      "code": "SP17",
+      "name": "The Sims 4 Nifty Knitting Stuff",
+      "type": "stuff",
+      "size": 259709129,
+      "sha256": "17b8dbe030e91b3955adc4c93b8b7c0102b4a0c7a8c14d8e793549d50c58c723",
+      "urls": [
+        "https://gofile.io/d/tzsGa3"
+      ],
+      "installDirs": [
+        "SP17"
+      ]
+    },
+    {
+      "code": "SP18",
+      "name": "The Sims 4 Paranormal Stuff",
+      "type": "stuff",
+      "size": 240519616,
+      "sha256": "ee8671d8d7c09dcfb473cfa1a6eebca2c6139e4797c98f5673732d05156974ac",
+      "urls": [
+        "https://gofile.io/d/y5cYmF"
+      ],
+      "installDirs": [
+        "SP18"
+      ]
+    },
+    {
+      "code": "SP20",
+      "name": "The Sims 4 Throwback Fit Kit",
+      "type": "kit",
+      "size": 57097954,
+      "sha256": "2cd0897df7c0afa858a568108d5ce22348894b08b131f90c02422e466d5a1749",
+      "urls": [
+        "https://gofile.io/d/VqEObZ"
+      ],
+      "installDirs": [
+        "SP20"
+      ]
+    },
+    {
+      "code": "SP21",
+      "name": "The Sims 4 Country Kitchen Kit",
+      "type": "kit",
+      "size": 55788387,
+      "sha256": "c61d5ccef36273488b9fe213529b96ddb77b7dbcf9b16a4881efc1f3db5efd55",
+      "urls": [
+        "https://gofile.io/d/p3MHsP"
+      ],
+      "installDirs": [
+        "SP21"
+      ]
+    },
+    {
+      "code": "SP22",
+      "name": "The Sims 4 Bust the Dust Kit",
+      "type": "kit",
+      "size": 74885166,
+      "sha256": "881ffb0345a80062aeba5e719a994b2f43c36e71156635741b1447fc339cfd29",
+      "urls": [
+        "https://gofile.io/d/XMdFTk"
+      ],
+      "installDirs": [
+        "SP22"
+      ]
+    },
+    {
+      "code": "SP23",
+      "name": "The Sims 4 Courtyard Oasis Kit",
+      "type": "kit",
+      "size": 65143844,
+      "sha256": "a075d6d40fea042b8ccd07899cbee8c99cefec0270db92d64d6a91269115f0bf",
+      "urls": [
+        "https://gofile.io/d/SMMCil"
+      ],
+      "installDirs": [
+        "SP23"
+      ]
+    },
+    {
+      "code": "SP24",
+      "name": "The Sims 4 Fashion Street Kit",
+      "type": "kit",
+      "size": 67209224,
+      "sha256": "841370150859ceb2ef0dd0b9d84ee3142aab1157c192787b36613e27e36b32ed",
+      "urls": [
+        "https://gofile.io/d/6Hyprq"
+      ],
+      "installDirs": [
+        "SP24"
+      ]
+    },
+    {
+      "code": "SP25",
+      "name": "The Sims 4 Industrial Loft Kit",
+      "type": "kit",
+      "size": 46014788,
+      "sha256": "a8bc9500fffb3f59e61707a8a87d8cfa5640a6ae6d30b081a6dd9f6b8093e311",
+      "urls": [
+        "https://gofile.io/d/m6Rlnq"
+      ],
+      "installDirs": [
+        "SP25"
+      ]
+    },
+    {
+      "code": "SP26",
+      "name": "The Sims 4 Incheon Arrivals Kit",
+      "type": "kit",
+      "size": 73340026,
+      "sha256": "cf37682ff0631d920986c97fa87aca67c08a9c15ae8b4b8183ccd5293b2d66cf",
+      "urls": [
+        "https://gofile.io/d/WY7noy"
+      ],
+      "installDirs": [
+        "SP26"
+      ]
+    },
+    {
+      "code": "SP28",
+      "name": "The Sims 4 Modern Menswear Kit",
+      "type": "kit",
+      "size": 49058148,
+      "sha256": "e488d988b3739e3df88918f15a0205cef2984108fc15405350ba1e683a2cfbce",
+      "urls": [
+        "https://gofile.io/d/AKdHb8"
+      ],
+      "installDirs": [
+        "SP28"
+      ]
+    },
+    {
+      "code": "SP29",
+      "name": "The Sims 4 Blooming Rooms Kit",
+      "type": "kit",
+      "size": 43951512,
+      "sha256": "ec6deb4b84d5ec7bce72934210fce43540a10503ace5f1c78809d43f825a7a0d",
+      "urls": [
+        "https://gofile.io/d/6eC8GB"
+      ],
+      "installDirs": [
+        "SP29"
+      ]
+    },
+    {
+      "code": "SP30",
+      "name": "The Sims 4 Carnaval Streetwear Kit",
+      "type": "kit",
+      "size": 57176734,
+      "sha256": "b7f4d0ec1185c0075d6bb79af973f590b8ce236453a6d8cc6a143197e1308877",
+      "urls": [
+        "https://gofile.io/d/R0fwuz"
+      ],
+      "installDirs": [
+        "SP30"
+      ]
+    },
+    {
+      "code": "SP31",
+      "name": "The Sims 4 D\u00e9cor to the Max Kit",
+      "type": "kit",
+      "size": 35010300,
+      "sha256": "568e9465d230bb81f97ea9209d9103ece0fd3edc7af5549938ef9eebb1fa8a4b",
+      "urls": [
+        "https://gofile.io/d/UuUYIg"
+      ],
+      "installDirs": [
+        "SP31"
+      ]
+    },
+    {
+      "code": "SP32",
+      "name": "The Sims 4 Moonlight Chic Kit",
+      "type": "kit",
+      "size": 83029272,
+      "sha256": "c18933af29e6710131d4491d7f48acade53435b5ea8bd60a6d40c53c2769b85c",
+      "urls": [
+        "https://gofile.io/d/sibrOX"
+      ],
+      "installDirs": [
+        "SP32"
+      ]
+    },
+    {
+      "code": "SP33",
+      "name": "The Sims 4 Little Campers Kit",
+      "type": "kit",
+      "size": 54559329,
+      "sha256": "d72da1384636b4322bb4c0e545be5d6ad0269c61fcb911ddce8b2528b8a9ada6",
+      "urls": [
+        "https://gofile.io/d/gSndAF"
+      ],
+      "installDirs": [
+        "SP33"
+      ]
+    },
+    {
+      "code": "SP34",
+      "name": "The Sims 4 First Fits Kit",
+      "type": "kit",
+      "size": 47999517,
+      "sha256": "e0db988c7fe7eae233bd8074e8be3e048ce3a4877f493cbe3e67d18c34c9fe7f",
+      "urls": [
+        "https://gofile.io/d/XHgmSi"
+      ],
+      "installDirs": [
+        "SP34"
+      ]
+    },
+    {
+      "code": "SP35",
+      "name": "The Sims 4 Desert Luxe Kit",
+      "type": "kit",
+      "size": 48692823,
+      "sha256": "dacf37923987ee64fc48f007714a816d3109a21ea5fe24ac4ddcbff208398c72",
+      "urls": [
+        "https://gofile.io/d/ZLY1DV"
+      ],
+      "installDirs": [
+        "SP35"
+      ]
+    },
+    {
+      "code": "SP36",
+      "name": "The Sims 4 Pastel Pop Kit",
+      "type": "kit",
+      "size": 35364050,
+      "sha256": "c77a624662e78d3e8d1efaebd80e75858e121f2fde394d9ab8daac10d1b83498",
+      "urls": [
+        "https://gofile.io/d/P1yusQ"
+      ],
+      "installDirs": [
+        "SP36"
+      ]
+    },
+    {
+      "code": "SP37",
+      "name": "The Sims 4 Everyday Clutter Kit",
+      "type": "kit",
+      "size": 8493429,
+      "sha256": "93ff5c7dbe7e3e83259cbfd5055ccf696165506cd42147daa50be97e3fdea46f",
+      "urls": [
+        "https://gofile.io/d/Z4ao1x"
+      ],
+      "installDirs": [
+        "SP37"
+      ]
+    },
+    {
+      "code": "SP38",
+      "name": "The Sims 4 Simtimates Collection Kit",
+      "type": "kit",
+      "size": 63130694,
+      "sha256": "f5cece37f1c577b90214aa39df73a041f52e928aef84b91779a518271d3d6344",
+      "urls": [
+        "https://gofile.io/d/YWAKWh"
+      ],
+      "installDirs": [
+        "SP38"
+      ]
+    },
+    {
+      "code": "SP39",
+      "name": "The Sims 4 Bathroom Clutter Kit",
+      "type": "kit",
+      "size": 11210880,
+      "sha256": "f29e6b19e1c543f8fbbba1cce02c1dc0901165b612a32b210100caf9bd0c2e94",
+      "urls": [
+        "https://gofile.io/d/eLZInr"
+      ],
+      "installDirs": [
+        "SP39"
+      ]
+    },
+    {
+      "code": "SP40",
+      "name": "The Sims 4 Greenhouse Haven Kit",
+      "type": "kit",
+      "size": 21976356,
+      "sha256": "75589f39b80b035e872bd874ada1a74ff06a6b020cce2697235c3bd8016fb0c6",
+      "urls": [
+        "https://gofile.io/d/0mBWvf"
+      ],
+      "installDirs": [
+        "SP40"
+      ]
+    },
+    {
+      "code": "SP41",
+      "name": "The Sims 4 Basement Treasures Kit",
+      "type": "kit",
+      "size": 22681391,
+      "sha256": "06be0ff06756577fc42510cbd035b53da6ce8e02a29c3ec61fcac819a4fbc659",
+      "urls": [
+        "https://gofile.io/d/q5zt7w"
+      ],
+      "installDirs": [
+        "SP41"
+      ]
+    },
+    {
+      "code": "SP42",
+      "name": "The Sims 4 Grunge Revival Kit",
+      "type": "kit",
+      "size": 69704639,
+      "sha256": "dabdd42f97b377627225edb03cb9144a0cb1554aeaa3df2220ac769ad538ea3b",
+      "urls": [
+        "https://gofile.io/d/hSSGCR"
+      ],
+      "installDirs": [
+        "SP42"
+      ]
+    },
+    {
+      "code": "SP43",
+      "name": "The Sims 4 Book Nook Kit",
+      "type": "kit",
+      "size": 20938428,
+      "sha256": "df9bd60bf10bb4c8947fb659e35173b03136adc06e661febdcdbd0f742d81d5e",
+      "urls": [
+        "https://gofile.io/d/dE6TgA"
+      ],
+      "installDirs": [
+        "SP43"
+      ]
+    },
+    {
+      "code": "SP44",
+      "name": "The Sims 4 Poolside Splash Kit",
+      "type": "kit",
+      "size": 48307567,
+      "sha256": "b5051ab47d1dff0f71b04c4b77fc89b5a066bcd11c79bde9721407aeaec41c01",
+      "urls": [
+        "https://gofile.io/d/pf6hXY"
+      ],
+      "installDirs": [
+        "SP44"
+      ]
+    },
+    {
+      "code": "SP45",
+      "name": "The Sims 4 Modern Luxe Kit",
+      "type": "kit",
+      "size": 22473303,
+      "sha256": "1543e1fe5dcedd859b3037bc5680c4118ba16e13ed931f7b16d49176ca6d3d9c",
+      "urls": [
+        "https://gofile.io/d/CXnYZx"
+      ],
+      "installDirs": [
+        "SP45"
+      ]
+    },
+    {
+      "code": "SP46",
+      "name": "The Sims 4 Home Chef Hustle Stuff",
+      "type": "stuff",
+      "size": 259240836,
+      "sha256": "0c6ff307aff0829a3274abe39063fadf0f12527964e06320520e494c98c4139d",
+      "urls": [
+        "https://gofile.io/d/S4VEe5"
+      ],
+      "installDirs": [
+        "SP46"
+      ]
+    },
+    {
+      "code": "SP47",
+      "name": "The Sims 4 Castle Estate Kit",
+      "type": "kit",
+      "size": 113972134,
+      "sha256": "2022bfbed5d0ba2391718223e55396bd385dab7a1340f5e6da525db72af11a49",
+      "urls": [
+        "https://gofile.io/d/IF7j1m"
+      ],
+      "installDirs": [
+        "SP47"
+      ]
+    },
+    {
+      "code": "SP48",
+      "name": "The Sims 4 Goth Galore Kit",
+      "type": "kit",
+      "size": 58873396,
+      "sha256": "e92dd908c9afbb8e29baed670b2124d9da0e81ec3813806cc188e430f56f08e9",
+      "urls": [
+        "https://gofile.io/d/Vya1AP"
+      ],
+      "installDirs": [
+        "SP48"
+      ]
+    },
+    {
+      "code": "SP49",
+      "name": "The Sims 4 Crystal Creations Stuff",
+      "type": "stuff",
+      "size": 282760545,
+      "sha256": "7c36986dcbcf42a370609bf70c73debfad86d45a8c174943f4888714a479c8f1",
+      "urls": [
+        "https://gofile.io/d/qRMf72"
+      ],
+      "installDirs": [
+        "SP49"
+      ]
+    },
+    {
+      "code": "SP50",
+      "name": "The Sims 4 Urban Homage Kit",
+      "type": "kit",
+      "size": 95257279,
+      "sha256": "bb2ee9162dae631ad04ad88bad3c9f4013d064a8d48ccce5c9b64b5b582a6f14",
+      "urls": [
+        "https://gofile.io/d/4WLJyL"
+      ],
+      "installDirs": [
+        "SP50"
+      ]
+    },
+    {
+      "code": "SP51",
+      "name": "The Sims 4 Party Essentials Kit",
+      "type": "kit",
+      "size": 26944542,
+      "sha256": "00af804cd4a7f8514c3c6cbed3e22ddc8df264fd86b1085e018f713bfb557466",
+      "urls": [
+        "https://gofile.io/d/MAYnh0"
+      ],
+      "installDirs": [
+        "SP51"
+      ]
+    },
+    {
+      "code": "SP52",
+      "name": "The Sims 4 Riviera Retreat Kit",
+      "type": "kit",
+      "size": 49212389,
+      "sha256": "76ad8a8e9a1c41a1470a62dbd27540837ddab6beb6e8d836dbecef54d9357b3e",
+      "urls": [
+        "https://gofile.io/d/yb4aVz"
+      ],
+      "installDirs": [
+        "SP52"
+      ]
+    },
+    {
+      "code": "SP53",
+      "name": "The Sims 4 Cozy Bistro Kit",
+      "type": "kit",
+      "size": 48982764,
+      "sha256": "bc1828cbee57496e44a443d59678aedb1b47aa153ff3cf81a57bbf6a3310f196",
+      "urls": [
+        "https://gofile.io/d/CG0tmO"
+      ],
+      "installDirs": [
+        "SP53"
+      ]
+    },
+    {
+      "code": "SP54",
+      "name": "The Sims 4 Artist Studio Kit",
+      "type": "kit",
+      "size": 47540191,
+      "sha256": "cad66c3b6c3058b8a4bf0083472155816d814db0477b6aa519b24dab7bd07852",
+      "urls": [
+        "https://gofile.io/d/Uig5Hw"
+      ],
+      "installDirs": [
+        "SP54"
+      ]
+    },
+    {
+      "code": "SP55",
+      "name": "The Sims 4 Storybook Nursery Kit",
+      "type": "kit",
+      "size": 55705615,
+      "sha256": "932e93f7c057801279afe8ea1a97b571c932ce83ff3024199fef54fcfd49f523",
+      "urls": [
+        "https://gofile.io/d/IFW7z6"
+      ],
+      "installDirs": [
+        "SP55"
+      ]
+    },
+    {
+      "code": "SP56",
+      "name": "The Sims 4 Sweet Slumber Party Kit",
+      "type": "kit",
+      "size": 57942299,
+      "sha256": "5c537cddb91ebe897cda354bfb0da6ad419d168ccb0f7704194700d9982afa91",
+      "urls": [
+        "https://gofile.io/d/elOnfx"
+      ],
+      "installDirs": [
+        "SP56"
+      ]
+    },
+    {
+      "code": "SP57",
+      "name": "The Sims 4 Cozy Kitsch Kit",
+      "type": "kit",
+      "size": 18378480,
+      "sha256": "1c5d0b7bfbc20f2612b6f4baf9dca78f0f624f94046117da13cd386edb911bcf",
+      "urls": [
+        "https://gofile.io/d/onQQSP"
+      ],
+      "installDirs": [
+        "SP57"
+      ]
+    },
+    {
+      "code": "SP58",
+      "name": "The Sims 4 Comfy Gamer Kit",
+      "type": "kit",
+      "size": 18349638,
+      "sha256": "8635da01ee54a4f4fa9af4f89cd561ebf3397a63940b7213f9d1d1bce588bf81",
+      "urls": [
+        "https://gofile.io/d/fcJ1Gh"
+      ],
+      "installDirs": [
+        "SP58"
+      ]
+    },
+    {
+      "code": "SP59",
+      "name": "The Sims 4 Secret Sanctuary Kit",
+      "type": "kit",
+      "size": 62792530,
+      "sha256": "148835066629e2af5d16b63e901d0699447320e293baf5348d0425ff399cd0ef",
+      "urls": [
+        "https://gofile.io/d/113pyx"
+      ],
+      "installDirs": [
+        "SP59"
+      ]
+    },
+    {
+      "code": "SP60",
+      "name": "The Sims 4 Casanova Cave Kit",
+      "type": "kit",
+      "size": 63556100,
+      "sha256": "63ce4c4f518d89c57ea557bd8b54a1dc674b934a0f8b0a6529a73c522b9f8c4f",
+      "urls": [
+        "https://gofile.io/d/RCzz1t"
+      ],
+      "installDirs": [
+        "SP60"
+      ]
+    },
+    {
+      "code": "SP61",
+      "name": "The Sims 4 Refined Living Room Kit",
+      "type": "kit",
+      "size": 27729694,
+      "sha256": "53a694a2783eee20f4a323637bb6f432c51fef3a6e527313bc797a434ba4f0d3",
+      "urls": [
+        "https://gofile.io/d/TRWX3e"
+      ],
+      "installDirs": [
+        "SP61"
+      ]
+    },
+    {
+      "code": "SP62",
+      "name": "The Sims 4 Business Chic Kit",
+      "type": "kit",
+      "size": 52570353,
+      "sha256": "b853c7753065f450ab841380667661cdbb43edce90410d30178577038f109f74",
+      "urls": [
+        "https://gofile.io/d/z1Jm73"
+      ],
+      "installDirs": [
+        "SP62"
+      ]
+    },
+    {
+      "code": "SP63",
+      "name": "The Sims 4 Sleek Bathroom Kit",
+      "type": "kit",
+      "size": 26755403,
+      "sha256": "4ebf24d1c077951e17ffd610a5050758324d52c0620ec4450ca1e50191c20a76",
+      "urls": [
+        "https://gofile.io/d/MsQxsP"
+      ],
+      "installDirs": [
+        "SP63"
+      ]
+    },
+    {
+      "code": "SP64",
+      "name": "The Sims 4 Sweet Allure Kit",
+      "type": "kit",
+      "size": 97845518,
+      "sha256": "db377378a16c417eea560d84433914076357108beeda581e58869431ff2f4d1e",
+      "urls": [
+        "https://gofile.io/d/CdWkd8"
+      ],
+      "installDirs": [
+        "SP64"
+      ]
+    },
+    {
+      "code": "SP65",
+      "name": "The Sims 4 Restoration Workshop Kit",
+      "type": "kit",
+      "size": 52238746,
+      "sha256": "ec9cb2d9305206422d396f243d60fc0e6a4e835ba68d557a202bb1d07cfc5669",
+      "urls": [
+        "https://gofile.io/d/cAw8M7"
+      ],
+      "installDirs": [
+        "SP65"
+      ]
+    },
+    {
+      "code": "SP66",
+      "name": "The Sims 4 Golden Years Kit",
+      "type": "kit",
+      "size": 133533409,
+      "sha256": "401ec855c6112ee3b1af8497edfb574aa6a74538afccd7107237d839975b3195",
+      "urls": [
+        "https://gofile.io/d/H9vnBF"
+      ],
+      "installDirs": [
+        "SP66"
+      ]
+    },
+    {
+      "code": "SP67",
+      "name": "The Sims 4 Kitchen Clutter Kit",
+      "type": "kit",
+      "size": 23095172,
+      "sha256": "3ba2d820df4aebc613f266bac6bf5c1bcef81e52c5005adfbb89de06523d2022",
+      "urls": [
+        "https://gofile.io/d/cLDKBY"
+      ],
+      "installDirs": [
+        "SP67"
+      ]
+    },
+    {
+      "code": "SP68",
+      "name": "The Sims 4 SpongeBob\u2019s House Kit",
+      "type": "kit",
+      "size": 33671414,
+      "sha256": "8bc19bdb88688e8eb0d561a33db693d636e7c0e34946ec29c0d268bf9bd157b6",
+      "urls": [
+        "https://gofile.io/d/DlGUn8"
+      ],
+      "installDirs": [
+        "SP68"
+      ]
+    },
+    {
+      "code": "SP69",
+      "name": "The Sims 4 Autumn Apparel Kit",
+      "type": "kit",
+      "size": 84123381,
+      "sha256": "4dd925c997a5bf6ace8aaf3792f5c650cf009487cb2b581824801b465ae0fe49",
+      "urls": [
+        "https://gofile.io/d/89av5w"
+      ],
+      "installDirs": [
+        "SP69"
+      ]
+    },
+    {
+      "code": "SP70",
+      "name": "The Sims 4 SpongeBob Kid\u2019s Room Kit",
+      "type": "kit",
+      "size": 70960229,
+      "sha256": "7701cd29d2dd7eebc74722cbc73165b6637306202f05927bd72a246304dc6ca4",
+      "urls": [
+        "https://gofile.io/d/NETiKy"
+      ],
+      "installDirs": [
+        "SP70"
+      ]
+    },
+    {
+      "code": "SP71",
+      "name": "The Sims 4 Grange Mudroom Kit",
+      "type": "kit",
+      "size": 18150495,
+      "sha256": "443d5c7237ab1ceab256ff2f8493b2307adb6c7a1ef633fda3ce96667d0cadc1",
+      "urls": [
+        "https://gofile.io/d/r1qojx"
+      ],
+      "installDirs": [
+        "SP71"
+      ]
+    },
+    {
+      "code": "SP72",
+      "name": "The Sims 4 Essential Glam Kit",
+      "type": "kit",
+      "size": 8445006,
+      "sha256": "06650449cbff3235464347db001a7c7a543394645c45e5b64487ef244dffbbb9",
+      "urls": [
+        "https://gofile.io/d/w6UMt5"
+      ],
+      "installDirs": [
+        "SP72"
+      ]
+    },
+    {
+      "code": "SP73",
+      "name": "The Sims 4 Modern Retreat Kit",
+      "type": "kit",
+      "size": 37644672,
+      "sha256": "7c2437814d2d886ba0e7d4bd0c94e652d6c90b283798655a61b5efb30c543fce",
+      "urls": [
+        "https://gofile.io/d/ca15lA"
+      ],
+      "installDirs": [
+        "SP73"
+      ]
+    },
+    {
+      "code": "SP74",
+      "name": "The Sims 4 Garden to Table Kit",
+      "type": "kit",
+      "size": 44687991,
+      "sha256": "e40cb68c55870a06947d4bc8e1795043a5ca440402559215116132e7de10783b",
+      "urls": [
+        "https://gofile.io/d/NJx0Ci"
+      ],
+      "installDirs": [
+        "SP74"
+      ]
+    },
+    {
+      "code": "SP75",
+      "name": "The Sims 4 Wonderland Playroom Kit",
+      "type": "kit",
+      "size": 71917790,
+      "sha256": "fea701edb56c05afc83227f5dde96f19907f46dee6ab882f526d84fce60b2e2c",
+      "urls": [
+        "https://gofile.io/d/r30ZDu"
+      ],
+      "installDirs": [
+        "SP75"
+      ]
+    },
+    {
+      "code": "SP76",
+      "name": "The Sims 4 Silver Screen Style Kit",
+      "type": "kit",
+      "size": 90324778,
+      "sha256": "63123605e93aae36052a7b5f915f3454607b7e802c67d84562793d8408fd576c",
+      "urls": [
+        "https://gofile.io/d/OyWN68"
+      ],
+      "installDirs": [
+        "SP76"
+      ]
+    },
+    {
+      "code": "SP77",
+      "name": "The Sims 4 Tea Time Solarium Kit",
+      "type": "kit",
+      "size": 60451469,
+      "sha256": "158dd27064db0d4a85dee35e8f9dfe37917477e6c56b2f9f8243e4aea957a890",
+      "urls": [
+        "https://gofile.io/d/e9stez"
+      ],
+      "installDirs": [
+        "SP77"
+      ]
+    },
+    {
+      "code": "SP78",
+      "name": "The Sims 4 Lady Bridgerton\u2019s Masquerade Ball Fashion Kit",
+      "type": "kit",
+      "size": 110968694,
+      "sha256": "427be4d286021a971c468fa76d2e97ba9ca23ba7c493715237a85bc748edbeec",
+      "urls": [
+        "https://gofile.io/d/8jLQRx"
+      ],
+      "installDirs": [
+        "SP78"
+      ]
+    },
+    {
+      "code": "SP79",
+      "name": "The Sims 4 Lady Bridgerton\u2019s Masquerade Ballroom Kit",
+      "type": "kit",
+      "size": 76119657,
+      "sha256": "440d499d862e36b89f34a5e41af1e1013f427a57e664f55b7aa53cc8bad72080",
+      "urls": [
+        "https://gofile.io/d/oIHt2t"
+      ],
+      "installDirs": [
+        "SP79"
+      ]
+    },
+    {
+      "code": "SP80",
+      "name": "The Sims 4 Music Den Kit",
+      "type": "kit",
+      "size": 26931408,
+      "sha256": "3ec7fb479c52999423eeb9da32e07d17acdec004938d141eec79050bd4bc75f6",
+      "urls": [
+        "https://gofile.io/d/S1AQET"
+      ],
+      "installDirs": [
+        "SP80"
+      ]
+    },
+    {
+      "code": "SP81",
+      "name": "The Sims 4 Prairie Dreams Set",
+      "type": "stuff",
+      "size": 51884225,
+      "sha256": "c8143fb9a54cd16c42cd05fd482a1b6fecae400536ed0f093194b4c72dcc8077",
+      "urls": [
+        "https://gofile.io/d/gyYXEQ"
+      ],
+      "installDirs": [
+        "SP81"
+      ]
+    },
+    {
+      "code": "SP82",
+      "name": "The Sims 4 Yard Charm (Creator) Kit",
+      "type": "kit",
+      "size": 16420497,
+      "sha256": "f7336bd0c8ac1532e021bcb242072e020030b9faeebf0e8b9b983148da9a3808",
+      "urls": [
+        "https://gofile.io/d/istzpw"
+      ],
+      "installDirs": [
+        "SP82"
+      ]
+    },
+    {
+      "code": "SP83",
+      "name": "The Sims 4 Mean Girls Capsule Kit",
+      "type": "kit",
+      "size": 40987519,
+      "sha256": "7b93bc074304e0a6a6faf98009c948ee5d12c12141691d9a1d7a66617fb238cb",
+      "urls": [
+        "https://gofile.io/d/z2CVXgGG"
+      ],
+      "installDirs": [
+        "SP83"
+      ]
+    },
+    {
+      "code": "SP84",
+      "name": "The Sims 4 Clueless Capsule Kit",
+      "type": "kit",
+      "size": 41029603,
+      "sha256": "6808ed4ee9b4c245c20fba95f213eef8f219fb1a3bf09b9d4c54b711219024cb",
+      "urls": [
+        "https://gofile.io/d/SM7HSxz4"
+      ],
+      "installDirs": [
+        "SP84"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+    <PackageReference Include="xunit" Version="2.9.3" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.4" />
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Read as XML by MainWindowBindingTests, which resolves every {Binding} against the view
+         model that governs its DataContext. Embedded rather than located on disk so the same
+         build that compiles the assertion refreshes the copy it reads, and no working-directory
+         assumption can make the test vacuous. -->
+    <EmbeddedResource Include="..\LamSims.App\MainWindow.axaml" LogicalName="MainWindow.axaml" />
+    <EmbeddedResource Include="..\LamSims.App\App.axaml" LogicalName="App.axaml" />
+    <EmbeddedResource Include="..\LamSims.App\Themes\Palette.axaml" LogicalName="Palette.axaml" />
+    <EmbeddedResource Include="..\LamSims.App\Themes\Controls.axaml" LogicalName="Controls.axaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LamSims.App\LamSims.App.csproj" />
+    <ProjectReference Include="..\LamSims.Core\LamSims.Core.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -9,12 +9,43 @@ You need legit Sims 4 Base Game from EA App.
 This app only allow for downloading DLCs and packs and Unlocks them for your Legit Base Game.
 
 ## Requirements
-App is currently working only on PC with legit base game
-Either Steam EA App or Origin is working
+App works on Windows, Linux and macOS, you still need a legit base game.
+The DLC unlocker needs the EA App or Origin installed. On Windows that is the normal install, on
+Linux it is an install inside a Wine or Proton prefix. There is no unlocker on macOS.
 
 ## How to use?
-1. Download the latest lamsims-updater.exe file from Release section on right side of site
-1. Run EXE file.
+1. Download the build for your platform from the Releases section:
+   - Windows: `lamsims-updater-win-x64.exe`
+   - Linux: `lamsims-updater-linux-x64`
+   - macOS (Apple Silicon): `lamsims-updater-osx-arm64`
+   - macOS (Intel): `lamsims-updater-osx-x64`
+
+   You can check it against `SHA256SUMS` if you want to be sure the download is good.
+
+   On Linux and macOS you have to make the file executable first, run `chmod +x lamsims-updater-*`.
+   The macOS build is not notarized so Gatekeeper will block it. Run
+   `xattr -d com.apple.quarantine lamsims-updater-osx-*` to get around that.
+
+   On Linux the unlocker looks through the Wine and Proton prefixes your launchers made — Steam,
+   Lutris, Heroic and Bottles, Flatpak installs too — and gives you a row for every EA App or
+   Origin it finds. If yours is somewhere it does not look, use the Browse button next to "Wine
+   prefix" to point it at the prefix folder. Close the client, the game and the launcher window
+   before you install: the override has to be written while the prefix is idle, and the app will
+   refuse rather than risk it.
+
+   On macOS you can still download and install packs, the unlocker part is just hidden.
+1. Run the app.
+1. Paste this into the `Catalog:` box at the top and hit Load:
+
+   ```
+   https://raw.githubusercontent.com/Lamonsky/lamsims-updater/master/catalog.live.json
+   ```
+
+   That is the pack list, so the table stays empty until it loads. You only do this once — the app
+   saves it and picks it up again next time you start.
+
+   It also keeps a copy of the last list it loaded. If GitHub is unreachable later, hit "Use cached
+   copy" and carry on with that one.
 1. Select Browse and select your Sims 4 Base Game folder (Usually located in C:\Program Files\Electronic Arts\The Sims 4)
 1. Select Scan and wait for the app to find your DLCs and Packs that you have already downloaded.
 1. Select DLCs you want to download and install.

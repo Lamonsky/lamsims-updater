@@ -1,0 +1,61 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="LamSims.App.App"
+             RequestedThemeVariant="Dark">
+  <Application.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceInclude Source="avares://LamSims.App/Themes/Palette.axaml"/>
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </Application.Resources>
+  <Application.Styles>
+    <!-- Fluent derives a family of SystemAccentColor* keys at runtime from
+         Avalonia.Themes.Fluent.Accents.SystemAccentColors, so those keys never appear in a dump of
+         DECLARED resources and overriding them by hand races the provider. Feeding the theme's own
+         palette is the supported seam. #cba6f7 is CatppuccinMauve; x:Key="Dark" is the palette that
+         applies because RequestedThemeVariant is pinned to Dark above. -->
+    <FluentTheme>
+      <FluentTheme.Palettes>
+        <!-- The theme's ground, fed through the palette rather than declared as System*Color keys
+             in Application.Resources. Those keys do resolve there, but Fluent's own
+             SystemControl*Brush definitions reference them with StaticResource inside the theme's
+             own dictionary scope, where an application-level override is invisible, so every
+             brush derived from them keeps Fluent's black and white: a ComboBox renders #66000000
+             behind white text where the palette asks for Surface0 behind Text. Any control
+             without a per-control override below depends entirely on these.
+             SystemRevealListLow/MediumColor are dropped rather than moved: ColorPaletteResources
+             has no property for either. -->
+        <ColorPaletteResources x:Key="Dark" Accent="#cba6f7"
+                              AltHigh="#1e1e2e"
+                              AltLow="#181825"
+                              AltMedium="#1e1e2e"
+                              AltMediumHigh="#1e1e2e"
+                              AltMediumLow="#181825"
+                              BaseHigh="#cdd6f4"
+                              BaseLow="#45475a"
+                              BaseMedium="#a6adc8"
+                              BaseMediumHigh="#bac2de"
+                              BaseMediumLow="#6c7086"
+                              ChromeAltLow="#313244"
+                              ChromeBlackHigh="#11111b"
+                              ChromeBlackLow="#11111b"
+                              ChromeBlackMedium="#11111b"
+                              ChromeBlackMediumLow="#11111b"
+                              ChromeDisabledHigh="#45475a"
+                              ChromeDisabledLow="#6c7086"
+                              ChromeGray="#7f849c"
+                              ChromeHigh="#585b70"
+                              ChromeLow="#181825"
+                              ChromeMedium="#313244"
+                              ChromeMediumLow="#45475a"
+                              ChromeWhite="#cdd6f4"
+                              ErrorText="#f38ba8"
+                              ListLow="#313244"
+                              ListMedium="#45475a"
+                              RegionColor="#1e1e2e" />
+      </FluentTheme.Palettes>
+    </FluentTheme>
+    <StyleInclude Source="avares://LamSims.App/Themes/Controls.axaml"/>
+  </Application.Styles>
+</Application>

@@ -1,0 +1,10 @@
+<!--
+  The single source of truth for the shipped version. Deliberately not a Directory.Build.props:
+  MSBuild imports that into every project it finds walking up the tree, so an unrelated project
+  dropped beside this one would pick up the version by accident. An explicit import cannot.
+-->
+<Project>
+  <PropertyGroup>
+    <Version>2.0.0</Version>
+  </PropertyGroup>
+</Project>
