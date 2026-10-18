@@ -12,6 +12,7 @@ public sealed class GoFileDownloader : IDisposable
     private const string ApiBaseUrl = "https://api.gofile.io";
     private const string DefaultUserAgent = "Mozilla/5.0";
     private const int WebsiteTokenSlotSeconds = 14400;
+    private const int RetryDelaySeconds = 5;
 
     private readonly HttpClient _httpClient;
     private readonly bool _disposeHttpClient;
@@ -194,6 +195,8 @@ public sealed class GoFileDownloader : IDisposable
             catch (TaskCanceledException) when (!cancellationToken.IsCancellationRequested && attempt < _maxRetries)
             {
             }
+
+            await Task.Delay(TimeSpan.FromSeconds(RetryDelaySeconds * attempt), cancellationToken);
         }
 
         return false;
@@ -264,6 +267,12 @@ public sealed class GoFileDownloader : IDisposable
             return;
         }
 
+        // Reuse the guest account from the previous download instead of creating a new one
+        if (_httpClient.DefaultRequestHeaders.Authorization is not null)
+        {
+            return;
+        }
+
         string websiteToken = CreateWebsiteToken(_httpClient.DefaultRequestHeaders.UserAgent.ToString(), string.Empty);
         using HttpRequestMessage request = new(HttpMethod.Post, $"{ApiBaseUrl}/accounts");
         request.Headers.Add("X-Website-Token", websiteToken);
@@ -292,6 +301,8 @@ public sealed class GoFileDownloader : IDisposable
             catch (TaskCanceledException) when (!cancellationToken.IsCancellationRequested && attempt < _maxRetries)
             {
             }
+
+            await Task.Delay(TimeSpan.FromSeconds(RetryDelaySeconds * attempt), cancellationToken);
         }
     }
 
