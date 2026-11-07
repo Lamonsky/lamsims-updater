@@ -65,6 +65,11 @@ namespace sims4_updater.ViewModel
             CurrentVersion = _updateChecker.GetCurrentVersion();
 
             _ = CheckForUpdatesAsync();
+
+            if(Sims4Model.GamePath != null)
+            {
+                this.Scan();
+            }
         }
 
         private async Task CheckForUpdatesAsync()
@@ -122,6 +127,16 @@ namespace sims4_updater.ViewModel
         [RelayCommand]
         private void Browse()
         {
+            List<string> forbidden_folders = [
+                "C:\\Users\\",
+                "Documents",
+                "Dokumenty",
+                "Downloads",
+                "Pobrane",
+                "Mods",
+                "Desktop"
+                ];
+
             var dialog = new OpenFolderDialog
             {
                 Title = "Select Sims 4 folder"
@@ -129,6 +144,18 @@ namespace sims4_updater.ViewModel
 
             if (dialog.ShowDialog() == true)
             {
+                if(String.IsNullOrEmpty(dialog.FolderName))
+                {
+                    Logger.AddLog("ERROR: Please select a valid Sims 4 game folder.");
+                    return;
+                }
+
+                if (forbidden_folders.Any(folder => dialog.FolderName.Contains(folder, StringComparison.OrdinalIgnoreCase)))
+                {
+                    Logger.AddLog("ERROR: Invalid folder detected. Please select a valid Sims 4 game folder.");
+                    return;
+                }
+
                 Sims4Model.GamePath = dialog.FolderName;
             }
         }

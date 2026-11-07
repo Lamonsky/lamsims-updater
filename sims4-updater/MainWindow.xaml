@@ -88,10 +88,11 @@
                     BorderBrush="{DynamicResource Surface2Brush}" 
                     BorderThickness="1"
                     Margin="0,0,10,0">
-                <ScrollViewer VerticalScrollBarVisibility="Auto" CanContentScroll="True">
                     <ListBox ItemsSource="{Binding DlcList}" 
                             Background="Transparent"
-                            BorderThickness="0">
+                            BorderThickness="0"
+                             ScrollViewer.CanContentScroll="True"
+                             ScrollViewer.VerticalScrollBarVisibility="Auto">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
@@ -108,7 +109,6 @@
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
-                </ScrollViewer>
             </Border>
             <Border Grid.Column="1" Grid.RowSpan="2" 
                     Background="{DynamicResource MantleBrush}" 

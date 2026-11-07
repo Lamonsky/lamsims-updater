@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using Microsoft.Win32;
 using sims4_updater.Helpers;
 using System.IO;
 using System.Linq;
@@ -18,6 +19,51 @@ namespace sims4_updater.Models
         public Sims4Model(Logger logger)
         {
             _logger = logger;
+
+            string tempPath = ScanRegistry();
+
+            if(!string.IsNullOrEmpty(tempPath))
+            {
+                GamePath = tempPath;
+            }
+            else
+            {
+                _logger.AddLog("Sims 4 installation path not found in registry.");
+            }
+        }
+
+        private string ScanRegistry()
+        {
+            List<string> Registries = [
+                "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\Steam App 1222670",
+                "SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall"
+                ];
+
+            try
+            {
+                foreach(var regPath in Registries)
+                {
+                    using (RegistryKey? key = Registry.LocalMachine.OpenSubKey(regPath))
+                    {
+                        if (key != null)
+                        {
+                            object? value = key.GetValue("InstallLocation");
+                            if (value != null)
+                            {
+                                string path = value.ToString() ?? string.Empty;
+                                _logger.AddLog($"Found Sims 4 installation path in registry: {path}");
+                                return path;
+                            }
+                        }
+                    }
+                }            
+            }
+            catch (Exception ex)
+            {
+                _logger.AddLog($"Error while scanning registry: {ex.Message}");
+            }
+            _logger.AddLog("Sims 4 installation path not found in registry.");
+            return string.Empty;
         }
 
         public void ScanDirectoryForDLCS(string path)
