@@ -8,10 +8,15 @@ namespace sims4_updater.Helpers
         [ObservableProperty]
         private string _logs = string.Empty;
 
+        private readonly object _lock = new object();
+
         public void AddLog(string log)
         {
             string CurrentDateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-            Logs += $"{CurrentDateTime} - {log}{Environment.NewLine}";
+            lock (_lock)
+            {
+                Logs += $"{CurrentDateTime} - {log}{Environment.NewLine}";
+            }
         }
     }
 }

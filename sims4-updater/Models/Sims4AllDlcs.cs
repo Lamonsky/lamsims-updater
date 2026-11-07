@@ -141,6 +141,8 @@ namespace sims4_updater.Models
                 timeout: Timeout.InfiniteTimeSpan
             );
 
+            Task installTask = Task.CompletedTask;
+
             foreach (var dlc in Sims4DLCs)
             {
                 if (dlc.ToInstall && !dlc.Installed)
@@ -148,7 +150,11 @@ namespace sims4_updater.Models
                     logger.AddLog($"Downloading DLC: {dlc.Code} - {dlc.Name}");
 
 
-                    bool success = await dlc.Download(gofile_downloader, logger);
+                    // Run the download off the UI thread so its file work doesn't freeze the app
+                    bool success = await Task.Run(() => dlc.Download(gofile_downloader, logger));
+
+                    // Small pause between DLCs so GoFile doesn't rate limit us
+                    await Task.Delay(TimeSpan.FromSeconds(3));
 
                     if (!success)
                     {
@@ -158,20 +164,29 @@ namespace sims4_updater.Models
                         continue;
                     }
 
-                    logger.AddLog($"Extracting DLC: {dlc.Code} - {dlc.Name}");
-                    dlc.Extract(logger);
+                    // Install this DLC in the background after the previous one finishes,
+                    // so the next download can start right away
+                    Task previousInstall = installTask;
+                    installTask = Task.Run(async () =>
+                    {
+                        await previousInstall;
 
-                    logger.AddLog($"Installing DLC: {dlc.Code} - {dlc.Name}");
-                    dlc.Install(gamepath, logger);
+                        logger.AddLog($"Extracting DLC: {dlc.Code} - {dlc.Name}");
+                        dlc.Extract(logger);
 
-                    logger.AddLog($"✓ Installed DLC: {dlc.Code} - {dlc.Name}");
-                    logger.AddLog($"Clearing TEMP files");
-                    await Task.Run(() => dlc.Remove(logger));
+                        logger.AddLog($"Installing DLC: {dlc.Code} - {dlc.Name}");
+                        dlc.Install(gamepath, logger);
 
-                    logger.AddLog("---------------------------------------------");
+                        logger.AddLog($"✓ Installed DLC: {dlc.Code} - {dlc.Name}");
+                        logger.AddLog($"Clearing TEMP files");
+                        dlc.Remove(logger);
+
+                        logger.AddLog("---------------------------------------------");
+                    });
                 }
             }
 
+            await installTask;
             logger.AddLog("All downloads completed.");
         }
       
