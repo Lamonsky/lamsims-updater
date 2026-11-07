@@ -5,6 +5,7 @@ using sims4_updater.Helpers;
 using sims4_updater.Models;
 using sims4_updater.Services;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Windows;
 
 namespace sims4_updater.ViewModel
@@ -127,6 +128,7 @@ namespace sims4_updater.ViewModel
         [RelayCommand]
         private void Browse()
         {
+
             List<string> forbidden_folders = [
                 "C:\\Users\\",
                 "Documents",
@@ -144,6 +146,8 @@ namespace sims4_updater.ViewModel
 
             if (dialog.ShowDialog() == true)
             {
+                string folderToFind = "Game";
+
                 if(String.IsNullOrEmpty(dialog.FolderName))
                 {
                     Logger.AddLog("ERROR: Please select a valid Sims 4 game folder.");
@@ -151,6 +155,22 @@ namespace sims4_updater.ViewModel
                 }
 
                 if (forbidden_folders.Any(folder => dialog.FolderName.Contains(folder, StringComparison.OrdinalIgnoreCase)))
+                {
+                    Logger.AddLog("ERROR: Invalid folder detected. Please select a valid Sims 4 game folder.");
+                    return;
+                }
+
+                bool finded = false;
+
+                foreach(string directory in Directory.EnumerateDirectories(dialog.FolderName))
+                {
+                    if (folderToFind == directory)
+                    {
+                        finded = true;
+                    }
+                }
+
+                if (!finded)
                 {
                     Logger.AddLog("ERROR: Invalid folder detected. Please select a valid Sims 4 game folder.");
                     return;
