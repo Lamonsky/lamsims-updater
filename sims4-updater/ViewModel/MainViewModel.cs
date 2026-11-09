@@ -164,7 +164,7 @@ namespace sims4_updater.ViewModel
 
                 foreach(string directory in Directory.EnumerateDirectories(dialog.FolderName))
                 {
-                    if (folderToFind == directory)
+                    if (directory.ToLower().Contains(folderToFind.ToLower()))
                     {
                         finded = true;
                     }
